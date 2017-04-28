@@ -1,0 +1,59 @@
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	width: 100%;
+	background-image: url("https://s-media-cache-ak0.pinimg.com/originals/05/4e/8d/054e8d3ca8f3c51e397fd5f6fda625c6.jpg");
+	background-position: 1% 31%;
+	background-attachment: fixed;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 18px;
+}
+
+.heading {
+	width: 100%;
+	background-color: rgb(237, 234, 218);
+	border-bottom: 2px solid peru;
+	margin-bottom: 20px;
+	padding: 10px 0;
+}
+
+.heading img {
+	width: 200px;
+	margin-left: 20px;
+}
+
+.location {
+	width: 70%;
+	margin: 0 auto;
+	border: 1px solid black;
+	text-align: center;
+}
+
+.location-heading {
+	background-color: crimson;
+	color: lemonchiffon;
+	text-align: left;
+}
+
+.location form {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.street {
+	width: 100%;
+}
+
+#map {
+	width: 70%;
+	height: 500px;
+	margin: 20px auto;
+	border: 3px solid brown;
+}
+
+.info {
+	width: 100px;
+	height: 100px;
+}
