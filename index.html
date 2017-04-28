@@ -75,8 +75,12 @@
       	['Wreck 7', 34.145850, -119.260121, 7]
       ];
 
-      var contentString =
-        '<p class="info"><strong>Wreck:</strong><br><strong>Date:</strong><br><strong>History:</strong><br><button>Get Articles</button></p>';
+      $.ajax({
+      	url: "www.rednightsky.com/all",
+      	method: "GET"
+      }).done(function(response) {
+      	console.log(response);
+      })
 
 
       function setMarkers(map) {
@@ -117,6 +121,8 @@
             label: wreck[0],
             zIndex: wreck[3]
           });
+            var contentString =
+        	'<p class="info"><strong>Wreck: ' + wreck[0] + '</strong><br><strong>Date:</strong><br><strong>History:</strong><br><br><button id="' + wreck[0] + '">Get Articles</button></p>';
           	var infowindow = new google.maps.InfoWindow({
    	 			content: contentString
  			});
