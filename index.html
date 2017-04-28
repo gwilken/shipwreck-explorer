@@ -24,7 +24,7 @@
 		</div>
     <script>
 
-    function userLocation() {
+    /*function userLocation() {
     if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 latitude = position.coords.latitude;
@@ -40,7 +40,7 @@
         }
     }
 
-    userLocation();
+    userLocation();*/
     // console.log(latitude + " : " + longitude);
 
      //Initialie map centered on user location with specified zoom (radius)
@@ -60,27 +60,33 @@
      }
 
 
-        setMarkers(map);
+        // setMarkers(map);
       }
 
       // Data for the markers consisting of a name, a LatLng and a zIndex for the
       // order in which these markers should display on top of each other.
-      var wrecks = [
-      	['Wreck 1', 33.998014, -118.823274, 1],
-      	['Wreck 2', 33.991983, -118.542794, 2],
-      	['Wreck 3', 33.874624, -118.438424, 3],
-      	['Wreck 4', 33.517216, -118.624767, 4],
-      	['Wreck 5', 33.908311, -118.835140, 5],
-      	['Wreck 6', 34.145850, -119.260121, 6],
-      	['Wreck 7', 34.145850, -119.260121, 7]
-      ];
+      var gresult;
+
+      var wrecks = [];
 
       $.ajax({
       	url: "http://www.rednightsky.com/all",
       	method: "GET"
       }).done(function(response) {
       	console.log(response);
+        gresult = response;
+        for (var i = 0; i < 10; i++) {
+          wrecks.push(new Wreck(i));
+        }
+        console.log(wrecks);
       })
+
+      function Wreck(i){
+        
+            this.name = gresult[0][i].properties.vesslterms;
+            this.lng = gresult[0][i].geometry.coordinates[0];
+            this.lat = gresult[0][i].geometry.coordinates[1];
+        }
 
 
       function setMarkers(map) {
@@ -108,29 +114,27 @@
           type: 'poly'
         };
         for (var i = 0; i < wrecks.length; i++) {
-        	createMarkers(i);
-                  }
-          function createMarkers(i) {
           var wreck = wrecks[i];
           var marker = new google.maps.Marker({
-            position: {lat: wreck[1], lng: wreck[2]},
+            position: {lat: parseFloat(wreck.lat), lng: parseFloat(wreck.lng)},
             map: map,
             icon: image,
             shape: shape,
-            title: wreck[0],
-            label: wreck[0],
-            zIndex: wreck[3]
+            title: wreck.name,
+            label: wreck.name,
+            // zIndex: wreck[3]
           });
+          console.log(wreck.lat);
             var contentString =
-        	'<p class="info"><strong>Wreck: ' + wreck[0] + '</strong><br><strong>Date:</strong><br><strong>History:</strong><br><br><button id="' + wreck[0] + '">Get Articles</button></p>';
+        	'<p class="info"><strong>Wreck: ' + wreck.name + '</strong><br><strong>Date:</strong><br><strong>History:</strong><br><br><button id="' + wreck.name + '">Get Articles</button></p>';
           	var infowindow = new google.maps.InfoWindow({
    	 			content: contentString
- 			});
+ 		     	});
             marker.addListener('click', function() {
    			 	infowindow.open(map, marker);
- 			});
-        }
-
+ 			    });
+        marker.setMap(map);
+      }
       }
 
 
