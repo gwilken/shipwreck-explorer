@@ -31,12 +31,27 @@ app.set('port', WEBPORT);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-//id
+
+app.get('/id', function (req, res) {
+
+  var id = req.query.id;
+
+  var result = collection.find(
+    {
+      _id: id
+    }
+    );
+
+  result.then(function(doc) {
+
+    res.send(doc);
+
+  })
+
+})
 
 
 app.get('/all', function (req, res) {
-
-  console.log('hit all route');
 
 
   collection.find().toArray( function( err, docs) {
@@ -62,15 +77,11 @@ app.get('/range', function (req, res) {
     }
     ).toArray();
 
-
   resultsArr.then(function(arr) {
-
-    console.log(arr);
 
     res.send(arr);
 
   })
-
 
 })
 
@@ -85,10 +96,7 @@ app.get('/name', function (req, res) {
     }
     ).toArray();
 
-
   resultsArr.then(function(arr) {
-
-    console.log(arr);
 
     res.send(arr);
 
@@ -99,14 +107,9 @@ app.get('/name', function (req, res) {
 
 app.get('/proximity', function (req, res) {
 
-  console.log('hit proximity route');
-
  	var lat = parseFloat(req.query.lat);
 	var lon = parseFloat(req.query.lon);
 	var radius = parseFloat(req.query.radius);
-
-	console.log('query: ', lat, lon, radius);
-
 
   var resultsArr = collection.find( 
 
@@ -135,58 +138,13 @@ app.get('/proximity', function (req, res) {
 
   resultsArr.then(function(arg) {
 
-    console.log(arg);
-
-    // res.setHeader({
-
-    //   "Access-Control-Allow-Origin" : "*"
-    
-    // });
-
     res.send(arg);
 
-});
-
-      
-//console.log(resultsArr);
+  });
 
 })
          
 
-
-
-
-// app.get('/date', function (req, res) {
-
-//   mongoFetch(req.query.type, req.query.field, req.query.subfield, req.query.time, function(err, data) {
-
-//     res.send(data);
-
-//   });
-
-// });
-
-
-// app.get('/name', function (req, res) {
-
-//   mongoFetch(req.query.type, req.query.field, req.query.subfield, req.query.time, function(err, data) {
-
-//     res.send(data);
-
-//   });
-
-// });
-
-
-// app.get('/notes', function (req, res) {
-
-//   mongoFetch(req.query.type, req.query.field, req.query.subfield, req.query.time, function(err, data) {
-
-//     res.send(data);
-
-//   });
-
-// });
 
   mongo.connect(DB_STRING, function(err, db) {
     
@@ -201,30 +159,3 @@ app.get('/proximity', function (req, res) {
   });
 
 
-
-
-// function mongoFetch(msgtype, field, subfield, dur, callback) {    //time in minutes
-  
-//     var startTime = Date.now() - (dur * 60000);     
-      
-//       collection.find( 
-//             { createdAt: {  $gt: startTime  }, 
-            
-//             type: msgtype 
-//             },
-//             { _id: 0, 
-//               createdAt: 1, 
-//               [field]: 1  
-//             }
-//             ).toArray( function( err, docs) {
-//                 if(err) callback(err, docs);
-//                 else {  
-//                     var data_obj = {
-//                       time: docs.map(function(doc) { return doc.createdAt; }),
-//                       data: docs.map(function(doc) { return doc[field][subfield]; })
-//                       }
-//                     callback(null, data_obj);
-//                   }
-//               });
-
-//  };
