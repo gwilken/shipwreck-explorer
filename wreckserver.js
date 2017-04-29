@@ -31,6 +31,8 @@ app.set('port', WEBPORT);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+//id
+
 
 app.get('/all', function (req, res) {
 
@@ -49,31 +51,48 @@ app.get('/all', function (req, res) {
 });
 
 
-app.get('/name', function (req, res) {
+app.get('/range', function (req, res) {
 
-  console.log('hit name route');
+  var before = parseInt(req.query.before);
+  var after = parseInt(req.query.after);
 
-
-  var shipName = req.query.name;
-
-
-  resultsArr = collection.find({
-
-      "properties" : {
-        "vesslterms" : name
-      }
-    },
+  resultsArr = collection.find(
     {
-    }).toArray();
+      "properties.yearsunk": { $gt: after, $lt: before }
+    }
+    ).toArray();
 
-  resultsArr.then(function(arg) {
 
-    console.log(args);
+  resultsArr.then(function(arr) {
 
-    res.send(args);
+    console.log(arr);
+
+    res.send(arr);
 
   })
 
+
+})
+
+
+app.get('/name', function (req, res) {
+
+  var shipName = req.query.name;
+
+  resultsArr = collection.find(
+    {
+      "properties.vesslterms": shipName.toUpperCase()
+    }
+    ).toArray();
+
+
+  resultsArr.then(function(arr) {
+
+    console.log(arr);
+
+    res.send(arr);
+
+  })
 
 })
 
