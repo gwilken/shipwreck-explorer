@@ -20,8 +20,6 @@ var collection;
 var resultsArr = [];
 
 
-
-
 server.listen(WEBPORT, function listening() {
   console.log('Web server listening on port %d', server.address().port);
 });
@@ -34,21 +32,46 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/id', function (req, res) {
 
-  var id = req.query.id;
+  var qId = new ObjectID(req.query.id);
 
-  var result = collection.find(
-    {
-      _id: id
-    }
-    );
+  console.log('qid:', qId);
 
-  result.then(function(doc) {
+  collection.findOne( { _id : qId }, function(err, doc) {
+
+    console.log('error', err);
 
     res.send(doc);
 
+
   })
 
+
 })
+
+
+// app.get('/string', function (req, res) {
+
+//   var str = req.query.string;
+
+//   resultsArr = collection.find(
+    
+//     {
+//       $text:
+      
+//       { 
+//         $search: str 
+//       }
+    
+//     }
+//     ).toArray();
+
+//   resultsArr.then(function(arr) {
+
+//     res.send(arr);
+
+//   })
+
+// })
 
 
 app.get('/all', function (req, res) {
@@ -61,7 +84,6 @@ app.get('/all', function (req, res) {
     });
 
     res.send(resultsArr);
-
 
 });
 
@@ -82,6 +104,118 @@ app.get('/range', function (req, res) {
     res.send(arr);
 
   })
+
+})
+
+
+// app.get('/wreck', function(req, res) {
+
+
+//   var query = {};
+
+//   if(req.query.before && req.query.after) {
+
+//     var before = parseInt(req.query.before);
+//     var after = parseInt(req.query.after);
+
+//     var field = 'properties.yearsunk';
+
+//     var operator = {};
+     
+//     operator['$lt'] = before;
+//     operator['$gt'] = after;
+
+//     query[field] = operator;
+
+//   }
+
+//   if(req.query.before && !req.query.after) {
+    
+//     var before = parseInt(req.query.before);
+//     var field = 'properties.yearsunk';
+
+//     var operator = {};
+//     operator['$lt'] = before;
+
+//     query[field] = operator;
+
+//   }
+
+//   if(req.query.after && !req.query.before) {
+    
+//     var after = parseInt(req.query.after);
+//     var field = 'properties.yearsunk';
+
+//     var operator = {};
+//     operator['$lt'] = before;
+
+//     query[field] = operator;
+
+//   }
+
+
+
+//   if(req.query.id) {
+
+//     var id = req.query.id;
+//     var field = '_id';
+
+//     query[field] = id;
+    
+//   }
+
+//   // if(req.query.proximity) {
+    
+//   //   mongoQuery.geometry.$near.$geometry.coordinates = [parseFloat(req.query.lon), parseFloat(req.query.lat)];
+//   //   mongoQuery.geometry.$near.$maxDistance = parseInt(req.query.radius);
+
+//   // };
+
+
+//   // if(req.query.hasName) { 
+  
+//   //  // mongoQuery.properties.vesslterms = $nin: ["", "UNKNOWN", "WRECK"]; 
+
+//   // };
+
+  
+//   // if(req.query.name){
+  
+//   //   mongoQuery.properties.vesslterms = req.query.name;
+  
+//   // }
+
+
+
+//   resultsArr = collection.find(query).toArray();
+
+
+//   resultsArr.then(function(arr) {
+
+//     res.send(arr);
+
+//   })
+
+
+// })
+
+
+app.get('/hasname', function (req, res) {
+
+
+  resultsArr = collection.find(
+    {
+      "properties.vesslterms" : { $nin: ["", "UNKNOWN", "WRECK"] }   
+    }
+    ).toArray();
+
+
+  resultsArr.then(function(arr) {
+
+    res.send(arr);
+
+  })
+
 
 })
 
@@ -124,7 +258,7 @@ app.get('/proximity', function (req, res) {
   	        			coordinates : [ lon, lat ]
   	        		},
 
-          			$maxDistance : radius 
+          			$maxDistance : radius
          			}
 
          		}
