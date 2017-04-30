@@ -14,39 +14,56 @@ $(document).ready(function() {
     var database = firebase.database();
 
     var email;
+    var toggle = false;
+
+    $(".confirm").hide();
+    $(".favorites").hide();
 
     $(document).on("click", ".sign-in", function() {
 
         event.preventDefault();
-        database.ref("/toggle").set(true);
+        // database.ref("/toggle").set(true);
+        toggle = true;
 
         email = $(".email").val();
-        email = email.replace(".", "_");
+        email = email.replace(".", "|");
         console.log(email);
 
         database.ref("/users/" + email).on("value", function(test) {
-            if (test.val() === null) {
-
-                database.ref("/users").push(email);
-
-            } else {
+            console.log(test.val());
+            if (test.val() != null) {
                 pullFavorites();
             }
         })
+        $(".confirm").show();
+        $(".email").hide();
+        $(".sign-in").hide();
+    })
+
+    $(document).on("click", ".sign-out", function() {
+        event.preventDefault();
+        // database.ref("/toggle").set(false);
+        toggle = false;
+        $(".confirm").hide();
+        $(".email").show();
+        $(".sign-in").show();
+        $(".favorites").hide();
     })
 
     function pullFavorites() {
-        $(".favorites").empty().append("<span>Favorites:</span");
+        $(".favorites").show();
+        $(".fav-heading").nextAll().remove();
 
         database.ref("/users/" + email).on("child_added", function(res) {
             console.log(res);
-            var p = $("<p>").attr("class", "fav-wreck");
-            var name = "<p>Name: " + res.val().name + "</p>";
-            var lat = "<p>Lat: " + res.val().latitude + "</p>";
-            var lng = "<p>Lon: " + res.val().longitude + "</p>";
-            var history = "<p>History: " + res.val().history + "</p>";
+            var p = $("<p>").attr("class", "fav-wreck").attr("data-fb", res.key);
+            var name = "<p><span class='fav-label'>Name: </span>" + res.val().name + "</p>";
+            var lat = "<p><span class='fav-label'>Lat: </span>" + res.val().latitude + "</p>";
+            var lng = "<p><span class='fav-label'>Lon: </span>" + res.val().longitude + "</p>";
+            var history = "<p><span class='fav-label'>History: </span>" + res.val().history + "</p>";
+            var remove = "<button type='button' class='remove btn btn-default btn-sm'><span class='glyphicon glyphicon-trash'></span> Trash </button>";
             console.log(name);
-            p.append(name).append(history).append(lat).append(lng);
+            p.append(name).append(history).append(lat).append(lng).append(remove);
             $(".favorites").append(p);
 
         })
@@ -60,7 +77,8 @@ $(document).ready(function() {
         database.ref("/toggle").on("value", function(response) {
 
             console.log(response.val());
-            if (response.val() === true) {
+            // if (response.val() === true) {
+              if (toggle === true) {
 
                 $.ajax({
                     url: 'http://www.rednightsky.com/id',
@@ -74,7 +92,7 @@ $(document).ready(function() {
                     var lat = res.geometry.coordinates[1];
                     var lng = res.geometry.coordinates[0];
                     var his = res.properties.history;
-                    console.log(name+lat+lng+his);
+                    console.log(name + lat + lng + his);
                     console.log(email);
                     database.ref("/users/" + email).push({
                         name: name,
@@ -87,6 +105,14 @@ $(document).ready(function() {
             }
         })
     });
+
+    $(document).on("click", ".remove", function() {
+        if (toggle === true) {
+          var key = $(this).parent().attr("data-fb");
+          database.ref("/users/" + email + "/" + key).remove();
+          pullFavorites();
+        }
+    })
 
 
     $(".email").focus(function() {

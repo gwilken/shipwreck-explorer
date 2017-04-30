@@ -26,6 +26,10 @@ html, body {
 	margin-left: 20px;
 }
 
+.confirm {
+	margin-right: 10px;
+}
+
 .location {
 	width: 70%;
 	margin: 0 auto;
@@ -53,6 +57,7 @@ html, body {
 	height: 500px;
 	margin: 20px auto;
 	border: 3px solid brown;
+	border-radius: 2%;
 }
 
 .info {
@@ -63,8 +68,19 @@ html, body {
 .favorites {
 	width: 60%;
 	margin: 0 auto;
-	min-height: 300px;
 	background-color: rgba(180, 215, 234, 0.4);
+	border-radius: 2%;
+	margin-bottom: 30px;
+}
+
+.favorites p {
+	padding: 5px;
+}
+
+.fav-heading {
+	background-color: red;
+	color: white;
+	padding: 5px;
 }
 
 .fav-wreck {
@@ -74,4 +90,9 @@ html, body {
 
 .fav-wreck:hover {
 	background-color: lemonchiffon;
+}
+
+.fav-label {
+	font-weight: bold;
+	color: black;
 }
