@@ -14,8 +14,8 @@ const ObjectID  = require('mongodb').ObjectID;
 
 var WEBPORT     = 80;
 
-var DB_STRING           = 'mongodb://127.0.0.1:27017/test';
-var DB_COLLECTION       = 'wrecks';
+var DB_STRING       = 'mongodb://127.0.0.1:27017/test';
+var DB_COLLECTION   = 'wrecks';
 var collection;
 
 var resultsArr = [];
@@ -56,29 +56,35 @@ app.get('/id', function (req, res) {
 })
 
 
-// app.get('/string', function (req, res) {
+app.get('/string', function (req, res) {
 
-//   var str = req.query.string;
+  console.log('hit string endpoint');
 
-//   resultsArr = collection.find(
+  var re = req.query.string;
+
+  console.log(re);
+
+  var query = {};
+
+  var field = 'properties.history';
+
+    var operator = {};
+     
+    operator['$regex'] = re;
+    operator['$options'] = 'i';
+
+    query[field] = operator;
+
+    resultsArr = collection.find(query).toArray();
+
     
-//     {
-//       $text:
-      
-//       { 
-//         $search: str 
-//       }
-    
-//     }
-//     ).toArray();
+    resultsArr.then(function(arr) {
 
-//   resultsArr.then(function(arr) {
+      res.send(arr);
 
-//     res.send(arr);
+    })
 
-//   })
-
-// })
+})
 
 
 app.get('/all', function (req, res) {
