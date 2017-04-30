@@ -1,5 +1,21 @@
 $(document).ready(function() {
 
+
+var nav = $('#sideNav');
+
+
+$('#openNav').on('click', function() {
+    nav.css('width', '20%');
+  });
+
+
+$('#closeNav').on('click', function() {
+
+  nav.css('width', "0%");
+
+});
+
+
 //EXTERNAL VERSION
 
   // function initMap() {
@@ -52,7 +68,7 @@ $(document).ready(function() {
 
 $.ajax({
 
-	url: '/id',
+	url: 'http://127.0.0.1/id',
 	method: 'GET',
 	data: {
 		id: "59038085f857488a9a719176"
