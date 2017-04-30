@@ -65,6 +65,10 @@ body {
 
 #searchForm {
 	margin: 2% 6%;
+}
 
+.name {
+	font-style: italic;
+	font-size: 16px;
 }
 

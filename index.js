@@ -2,52 +2,97 @@ $(document).ready(function() {
 
   console.log('index.js');
 
-var nav = $('#sideNav');
+  var map = L.map('map').setView([34, -85], 5);
+  L.esri.basemapLayer('Oceans').addTo(map);
 
 
-$('#openNav').on('click', function() {
+
+  var nav = $('#sideNav');
+
+
+  $('#openNav').on('click', function() {
     nav.css('width', '30%');
   });
 
 
-$('#closeNav').on('click', function() {
-
-  nav.css('width', "0%");
-
-});
+  $('#closeNav').on('click', function() {
+    nav.css('width', "0%");
+  });
 
 
-  var map = L.map('map').setView([34, -118.5], 7);
-  L.esri.basemapLayer('Oceans').addTo(map);
+
+  $('#searchSubmit').on('click', function(event) {
+
+    event.preventDefault();
+
+    var name = $('#nameSearch').val().trim();
+
+    var lat = $('#latitudeSearch').val().trim();
+    var lon = $('#longitudeSearch').val().trim();
+    var radius = $('#radiusSearch').val().trim();
+
+    var after = $('#afterRangeSearch').val().trim();
+    var before = $('#beforeRangeSearch').val().trim();
+
+    var hasName = $('#hasName').prop('checked');
+    var hasHistory = $('#hasHistory').prop('checked');
+
+    var id = $('#idSearch').val().trim();
+
+    if(id) {
+
+      console.log(id);
+
+      $.ajax({
+        url: '/id',
+        method: 'GET',
+        data: {
+          id: id
+        }
+      }).done(function(res) {
+
+        console.log(res);
+
+        var marker = L.marker( [ res.geometry.coordinates[1], res.geometry.coordinates[0] ]).addTo(map);
+
+        marker.bindPopup('<h3><em>' + res.properties.vesslterms +'</em></h3>' + res.properties.history);
+    
+      })
+    
+    }
 
 
-  var name = "<b>HOLLYWOOD STAR</b>";
-
-  var description = "H11883/2008--AWOIS 50303 is a wreck charted at position 33-59-48.03N, 118-31-15.28W with a least depth of 42ft. Full multibeam coverage was acquired over AWOIS 50303. New position and depth was determined to be 33-59-48.60N, 118-31-13.20W with a least depth of 60ft. (ETR 07/21/09)NM DATED 6/13/49 DESCRIPTION 24 NO.1053; SUNK 2/14/42; POS. ACCURACY WITHIN 1 MILE; LEAST DEPTH 42 FT. (SOURCE UNK.); POS. 33-59-53N, 118-31-12W SURVEY REQUIREMENT INFORMATION";
+  })
 
 
-  var marker = L.marker([33.996833, -118.520333]).addTo(map);
 
-  marker.bindPopup(name + '<br><br>' + description);
 
 
   $.ajax({
 
-   url: 'http://127.0.0.1/string',
+   url: '/string',
    method: 'GET',
    data: {
      string: 'submarine'
    }
 
-  }).done(function(res) {
+    }).done(function(res) {
 
+    
+      var markerGroup = [];
 
     for(var i = 0; i < res.length; i++) {
     
-      var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]).addTo(map);
-      marker.bindPopup(res[i].properties.vesslterms + '<br><br>' + res[i].properties.history);
+      var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
+      marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history);
     
+      markerGroup.push(marker);
+
     }
+
+    var markers = L.layerGroup(markerGroup);
+
+    map.addLayer(markers);
 
   });
 
@@ -104,19 +149,19 @@ $('#closeNav').on('click', function() {
 
 // });
 
-$.ajax({
+// $.ajax({
 
-	url: 'http://127.0.0.1/id',
-	method: 'GET',
-	data: {
-		id: "59038085f857488a9a719176"
-	}
+// 	url: 'http://127.0.0.1/id',
+// 	method: 'GET',
+// 	data: {
+// 		id: "59038085f857488a9a719176"
+// 	}
 
-}).done(function(res) {
+// }).done(function(res) {
 
-	console.log(res);
+// 	console.log(res);
 
-});
+// });
 
 
 // $.ajax({

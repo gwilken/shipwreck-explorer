@@ -41,6 +41,8 @@ app.get('/id', function (req, res) {
 
     console.log('error', err);
 
+    console.log(doc)
+
     res.send(doc);
 
   })
