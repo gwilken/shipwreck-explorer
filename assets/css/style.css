@@ -17,6 +17,8 @@ html, body {
 	border-bottom: 2px solid peru;
 	margin-bottom: 20px;
 	padding: 10px 0;
+	display: flex;
+	justify-content: space-between;
 }
 
 .heading img {
@@ -56,4 +58,20 @@ html, body {
 .info {
 	min-width: 100px;
 	min-height: 100px;
+}
+
+.favorites {
+	width: 60%;
+	margin: 0 auto;
+	min-height: 300px;
+	background-color: rgba(180, 215, 234, 0.4);
+}
+
+.fav-wreck {
+	background-color: white;
+	border: 2px solid gray;
+}
+
+.fav-wreck:hover {
+	background-color: lemonchiffon;
 }
