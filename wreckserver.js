@@ -46,12 +46,9 @@ app.get('/id', function (req, res) {
 
     console.log('doc', doc);
 
-
     res.send(doc);
 
-
   })
-
 
 })
 
@@ -61,8 +58,6 @@ app.get('/string', function (req, res) {
   console.log('hit string endpoint');
 
   var re = req.query.string;
-
-  console.log(re);
 
   var query = {};
 
@@ -129,8 +124,24 @@ app.get('/wreck', function(req, res) {
 
   console.log('hit wreck endpoint');
 
-
   var query = {};
+
+
+  if(req.query.string) {
+
+    var re = req.query.string;
+
+    var field = 'properties.history';
+
+    var operator = {};
+     
+    operator['$regex'] = re;
+    operator['$options'] = 'i';
+
+    query[field] = operator;
+
+  }
+
 
   if(req.query.before && req.query.after) {
 

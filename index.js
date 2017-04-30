@@ -38,11 +38,23 @@ $(document).ready(function() {
 
 $.ajax({
 
-	url: 'http://127.0.0.1/string',
+	url: 'http://127.0.0.1/wreck',
 	method: 'GET',
 	data: {
+    
+    location: {
+
+       lat: 33.998014,
+       lon: -118.823274,
+       radius: 80000
+
+     },
+
 		string: 'wooden'
-	}
+	
+  }
+
+
 
 }).done(function(res) {
 
