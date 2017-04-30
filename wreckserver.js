@@ -31,10 +31,7 @@ app.set('port', WEBPORT);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
 app.get('/id', function (req, res) {
-
-  console.log('hit id endpoint');
 
   var qId = new ObjectID(req.query.id);
 
@@ -43,8 +40,6 @@ app.get('/id', function (req, res) {
   collection.findOne( { _id : qId }, function(err, doc) {
 
     console.log('error', err);
-
-    console.log('doc', doc);
 
     res.send(doc);
 

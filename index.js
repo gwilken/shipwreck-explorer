@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  console.log('index.js');
+//EXTERNAL VERSION
 
   // function initMap() {
   //   var myLatLng = {lat: -25.363, lng: 131.044};
@@ -36,25 +36,27 @@ $(document).ready(function() {
 	// 	});
 
 
+// $.ajax({
+
+// 	url: '/string',
+// 	method: 'GET',
+// 	data: {
+// 		string: 'submarine'
+// 	}
+
+// }).done(function(res) {
+
+// 	console.log(res);
+
+// });
+
 $.ajax({
 
-	url: 'http://127.0.0.1/wreck',
+	url: '/id',
 	method: 'GET',
 	data: {
-    
-    location: {
-
-       lat: 33.998014,
-       lon: -118.823274,
-       radius: 80000
-
-     },
-
-		string: 'wooden'
-	
-  }
-
-
+		id: "59038085f857488a9a719176"
+	}
 
 }).done(function(res) {
 
@@ -62,26 +64,39 @@ $.ajax({
 
 });
 
+
 // $.ajax({
 
-// 	url: 'http://127.0.0.1/id',
-// 	method: 'GET',
-// 	data: {
-// 		id: "59038085f857488a9a719176"
-// 	}
+//   url: 'http://127.0.0.1/wreck',
+//   method: 'GET',
+//   data: {
 
+//     location: {
+
+//       lat: 33.998014,
+//       lon: -118.823274,
+//       radius: 50000
+
+//     },
+      
+//       hasName: 1
+
+//   }
 // }).done(function(res) {
 
-// 	console.log(JSON.stringify(res));
+//   console.log(res);
 
-// });
+//  });
+
+
+
+
 
 //http://www.rednightsky.com/id?id=59038085f857488a9a719176
 
-
 // $.ajax({
 
-// 	url: 'http://127.0.0.1/range',
+// 	url: '/range',
 // 	method: 'GET',
 // 	data: {
 // 		before: '1950',
@@ -108,22 +123,11 @@ $.ajax({
 
 // $.ajax({
 
-//   url: 'http://127.0.0.1/wreck',
+//   url: '/wreck',
 //   method: 'GET',
 //   data: {
-
-//     location: {
-
-//       lat: 33.998014,
-//       lon: -118.823274,
-//       radius: 50000
-
-//     },
-      
-//       hasName: 0
-
+//     before: '1950'
 //   }
-
 
 // }).done(function(res) {
 

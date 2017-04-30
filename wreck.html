@@ -1,23 +1,38 @@
-
-<!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Input forms</title>
+<head>
+  <meta charset=utf-8 />
+  <title>Lost</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
-    	<script src="jquery-3.2.1.min.js"></script>
-    	<script src="index.js"></script>
-      <script src="style.css"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
+  <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
+  <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="index.js"></script>
+
+</head>
+<body>
+
+<div id="map"></div>
 
 
-  </head>
-  <body>
-    
-
-    <div id="map"></div>
+<script>
+  var map = L.map('map').setView([39, -97.5], 4);
+  L.esri.basemapLayer('Oceans').addTo(map);
 
 
+  var name = "HOLLYWOOD STAR";
 
-  </body>
+  var description = "H11883/2008--AWOIS 50303 is a wreck charted at position 33-59-48.03N, 118-31-15.28W with a least depth of 42ft. Full multibeam coverage was acquired over AWOIS 50303. New position and depth was determined to be 33-59-48.60N, 118-31-13.20W with a least depth of 60ft. (ETR 07/21/09)NM DATED 6/13/49 DESCRIPTION 24 NO.1053; SUNK 2/14/42; POS. ACCURACY WITHIN 1 MILE; LEAST DEPTH 42 FT. (SOURCE UNK.); POS. 33-59-53N, 118-31-12W SURVEY REQUIREMENT INFORMATION";
+
+
+  var marker = L.marker([33.996833, -118.520333]).addTo(map);
+
+  marker.bindPopup(name + '<br><br>' + description);
+
+</script>
+
+</body>
 </html>
