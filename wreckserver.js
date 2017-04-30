@@ -1,10 +1,11 @@
+
+
 const express   = require('express');
 const app       = express();
 const http      = require('http');
 const server    = http.createServer(app);
 const path      = require('path');
 const cors      = require('cors');
-
 
 app.use(cors());
 
@@ -22,6 +23,7 @@ var resultsArr = [];
 
 server.listen(WEBPORT, function listening() {
   console.log('Web server listening on port %d', server.address().port);
+  console.log('local dev env!!!');
 });
 
 app.set('port', WEBPORT);
@@ -32,6 +34,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/id', function (req, res) {
 
+  console.log('hit id endpoint');
+
   var qId = new ObjectID(req.query.id);
 
   console.log('qid:', qId);
@@ -39,6 +43,9 @@ app.get('/id', function (req, res) {
   collection.findOne( { _id : qId }, function(err, doc) {
 
     console.log('error', err);
+
+    console.log('doc', doc);
+
 
     res.send(doc);
 
@@ -90,6 +97,8 @@ app.get('/all', function (req, res) {
 
 app.get('/range', function (req, res) {
 
+  console.log('range endpoint hit');
+
   var before = parseInt(req.query.before);
   var after = parseInt(req.query.after);
 
@@ -101,6 +110,8 @@ app.get('/range', function (req, res) {
 
   resultsArr.then(function(arr) {
 
+    console.log(arr);
+
     res.send(arr);
 
   })
@@ -108,96 +119,107 @@ app.get('/range', function (req, res) {
 })
 
 
-// app.get('/wreck', function(req, res) {
+app.get('/wreck', function(req, res) {
+
+  console.log('hit wreck endpoint');
 
 
-//   var query = {};
+  var query = {};
 
-//   if(req.query.before && req.query.after) {
+  if(req.query.before && req.query.after) {
 
-//     var before = parseInt(req.query.before);
-//     var after = parseInt(req.query.after);
+    var before = parseInt(req.query.before);
+    var after = parseInt(req.query.after);
 
-//     var field = 'properties.yearsunk';
+    var field = 'properties.yearsunk';
 
-//     var operator = {};
+    var operator = {};
      
-//     operator['$lt'] = before;
-//     operator['$gt'] = after;
+    operator['$lt'] = before;
+    operator['$gt'] = after;
 
-//     query[field] = operator;
+    query[field] = operator;
 
-//   }
+  }
 
-//   if(req.query.before && !req.query.after) {
+  if(req.query.before && !req.query.after) {
     
-//     var before = parseInt(req.query.before);
-//     var field = 'properties.yearsunk';
+    var before = parseInt(req.query.before);
+    var field = 'properties.yearsunk';
 
-//     var operator = {};
-//     operator['$lt'] = before;
+    var operator = {};
+    operator['$lt'] = before;
 
-//     query[field] = operator;
+    query[field] = operator;
 
-//   }
+  }
 
-//   if(req.query.after && !req.query.before) {
+  if(req.query.after && !req.query.before) {
     
-//     var after = parseInt(req.query.after);
-//     var field = 'properties.yearsunk';
+    var after = parseInt(req.query.after);
+    var field = 'properties.yearsunk';
 
-//     var operator = {};
-//     operator['$lt'] = before;
+    var operator = {};
+    operator['$gt'] = after;
 
-//     query[field] = operator;
+    query[field] = operator;
 
-//   }
+  }
 
 
-
-//   if(req.query.id) {
-
-//     var id = req.query.id;
-//     var field = '_id';
-
-//     query[field] = id;
+  if(req.query.location.lat && req.query.location.lon && req.query.location.radius) {
     
-//   }
+    var field = 'geometry';
 
-//   // if(req.query.proximity) {
-    
-//   //   mongoQuery.geometry.$near.$geometry.coordinates = [parseFloat(req.query.lon), parseFloat(req.query.lat)];
-//   //   mongoQuery.geometry.$near.$maxDistance = parseInt(req.query.radius);
+    var operator1 = {};
+    var operator2 = {};
+    var operator3 = {};
 
-//   // };
+    operator3['type'] = "Point";
+    operator3['coordinates'] = [ parseFloat(req.query.location.lon), parseFloat(req.query.location.lat) ];
+
+    operator2['$geometry'] = operator3;
+
+    operator2['$maxDistance'] = parseFloat(req.query.location.radius);
+
+    operator1['$near'] = operator2;
+
+    query[field] = operator1;
+
+  };
 
 
-//   // if(req.query.hasName) { 
+  if(parseInt(req.query.hasName) === 1) { 
+
+    var field = 'properties.vesslterms';
+
+    var operator = {};
+    operator['$nin'] = ["", "UNKNOWN", "WRECK"];
+
+    query[field] = operator;
+
+  };
+
   
-//   //  // mongoQuery.properties.vesslterms = $nin: ["", "UNKNOWN", "WRECK"]; 
-
-//   // };
-
+  if(req.query.name){
   
-//   // if(req.query.name){
+    var field = 'properties.vesslterms';
+
+    query[field] = req.query.name;
   
-//   //   mongoQuery.properties.vesslterms = req.query.name;
-  
-//   // }
+  }
 
 
-
-//   resultsArr = collection.find(query).toArray();
-
-
-//   resultsArr.then(function(arr) {
-
-//     res.send(arr);
-
-//   })
+  resultsArr = collection.find(query).toArray();
 
 
-// })
+  resultsArr.then(function(arr) {
+
+    res.send(arr);
+
+  })
+
+})
 
 
 app.get('/hasname', function (req, res) {
