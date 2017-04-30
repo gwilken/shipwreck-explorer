@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+  console.log('index.js');
 
 var nav = $('#sideNav');
 
@@ -14,6 +15,43 @@ $('#closeNav').on('click', function() {
   nav.css('width', "0%");
 
 });
+
+
+  var map = L.map('map').setView([34, -118.5], 7);
+  L.esri.basemapLayer('Oceans').addTo(map);
+
+
+  var name = "<b>HOLLYWOOD STAR</b>";
+
+  var description = "H11883/2008--AWOIS 50303 is a wreck charted at position 33-59-48.03N, 118-31-15.28W with a least depth of 42ft. Full multibeam coverage was acquired over AWOIS 50303. New position and depth was determined to be 33-59-48.60N, 118-31-13.20W with a least depth of 60ft. (ETR 07/21/09)NM DATED 6/13/49 DESCRIPTION 24 NO.1053; SUNK 2/14/42; POS. ACCURACY WITHIN 1 MILE; LEAST DEPTH 42 FT. (SOURCE UNK.); POS. 33-59-53N, 118-31-12W SURVEY REQUIREMENT INFORMATION";
+
+
+  var marker = L.marker([33.996833, -118.520333]).addTo(map);
+
+  marker.bindPopup(name + '<br><br>' + description);
+
+
+  $.ajax({
+
+   url: 'http://127.0.0.1/string',
+   method: 'GET',
+   data: {
+     string: 'submarine'
+   }
+
+  }).done(function(res) {
+
+
+    for(var i = 0; i < res.length; i++) {
+    
+      var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]).addTo(map);
+      marker.bindPopup(res[i].properties.vesslterms + '<br><br>' + res[i].properties.history);
+    
+    }
+
+  });
+
+
 
 
 //EXTERNAL VERSION
