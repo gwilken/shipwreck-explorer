@@ -56,7 +56,7 @@ $(document).ready(function() {
 
         database.ref("/users/" + email).on("child_added", function(res) {
             console.log(res);
-            var p = $("<p>").attr("class", "fav-wreck").attr("data-fb", res.key);
+            var p = $("<p>").attr("class", "fav-wreck").attr("data-fb", res.key).attr("data-lat", res.val().latitude).attr("data-lng", res.val().longitude);
             var name = "<p><span class='fav-label'>Name: </span>" + res.val().name + "</p>";
             var lat = "<p><span class='fav-label'>Lat: </span>" + res.val().latitude + "</p>";
             var lng = "<p><span class='fav-label'>Lon: </span>" + res.val().longitude + "</p>";
