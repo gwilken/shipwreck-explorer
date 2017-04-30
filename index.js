@@ -5,7 +5,7 @@ var nav = $('#sideNav');
 
 
 $('#openNav').on('click', function() {
-    nav.css('width', '20%');
+    nav.css('width', '30%');
   });
 
 

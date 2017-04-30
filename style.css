@@ -20,7 +20,7 @@ body {
     z-index: 10;
     top: 0;
     right: 0;
-    background-color: white;
+    background-color: lightgrey;
     overflow-x: hidden;
     transition: 0.1s;
     padding-top: 60px;
@@ -37,10 +37,10 @@ body {
 
 #openNav {
 	position: fixed;
-	top: -4%;
+	top: 0%;
 	right: 2%;
 	z-index: 9;
-	color: black;
+	color: grey;
 	font-size: 50px;
 	cursor: pointer;
 }
@@ -52,8 +52,19 @@ body {
 #closeNav {
     position: absolute;
     cursor: pointer;
+    color: darkgrey;
     top: 0;
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
 }
+
+#closeNav:hover {
+    color: black;
+}
+
+#searchForm {
+	margin: 2% 6%;
+
+}
+

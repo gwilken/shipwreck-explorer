@@ -5,10 +5,12 @@
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="style.css">
   
   <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
   <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
+
   <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="index.js"></script>
 
@@ -17,15 +19,101 @@
 
   <div id="map"></div>
 
+  <p id="openNav">&#9776;</p>
+
+
   <div id="sideNav">
+   
     <p id="closeNav">&times;</p>
-    <a href="#">About</a>
-    <a href="#">Services</a>
-    <a href="#">Clients</a>
-    <a href="#">Contact</a>
+    
+    <form id="searchForm">
+
+      <div class="form-group">
+        <label for="nameSearch">Vessel Name</label>
+        <input type="text" class="form-control" id="nameSearch" placeholder="Hollywood Star">
+      </div>
+
+      <div class="form-group">
+        <label>Position</label>
+        <p class="help-block">Search for wrecks near a location.</p>
+        <input type="number" class="form-control" id="latitudeSearch" placeholder="Latitude">      
+        <input type="number" class="form-control" id="longitudeSearch" placeholder="Longitude">        
+        <input type="number" class="form-control" id="radiusSearch" placeholder="Radius">
+      </div>
+
+
+      <label>Year Sunk</label>
+      <p class="help-block">Search a range (in years)</p>
+      
+      <div class="form-group">
+        <label for="afterRangeSearch">After</label>
+        <input type="number" class="form-control" id="afterRangeSearch" placeholder="1910">      
+      </div>
+
+      <div class="form-group">
+        <label for="beforeRangeSearch">Before</label>
+        <input type="number" class="form-control" id="beforeRangeSearch" placeholder="2010">      
+      </div>
+
+      <div class="form-group">
+        <p class="help-block">Only show wrecks that:</p>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> Have a known name
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox"> Have historical information
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label for="idSearch">Unique Record ID</label>
+        <p class="help-block">Search the database by specific ID. This will override other search parameters</p>
+
+        <input type="text" class="form-control" id="idSearch" placeholder="59038085f857488a9a719176">
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    
+      <br><br>
+
+      <form id="loginForm" class="form-inline">
+
+        <p class="help-block">Login to remember your favorites.</p>
+
+          <div class="form-group">
+            <label class="sr-only" for="exampleInputEmail3">Email address</label>
+            <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email">
+          </div>
+
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Remember me
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-default">Sign in</button>
+        
+      </form>
+
   </div>
 
-<p id="openNav">&#9776;</p>
+
+    </form>
+  
+  
+
+
+
+
+
+
+
 
 <script>
   var map = L.map('map').setView([39, -97.5], 4);
