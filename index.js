@@ -110,7 +110,7 @@ $(document).ready(function() {
 
     var lat = $('#latitudeSearch').val().trim();
     var lon = $('#longitudeSearch').val().trim();
-    var radius = $('#radiusSearch').val().trim() * 1609;
+    var radius = $('#radiusSearch').val().trim();
 
     var after = $('#afterRangeSearch').val().trim();
     var before = $('#beforeRangeSearch').val().trim();
@@ -167,7 +167,7 @@ $(document).ready(function() {
             location: {
                 lat: lat,
                 lon: lon,
-                radius: radius  
+                radius: radius * 1609  
               },
 
               name: name,
