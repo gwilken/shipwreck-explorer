@@ -7,24 +7,53 @@ $(document).ready(function() {
 
   var markers;
 
-  var markerIds = {};
+  var markerMap = {};
 
   var nav = $('#sideNav');
 
 
-  var clearMarkers = function(event) {
-
-      event.preventDefault();
+  $('#clearMarkers').on('click', function(event) {
       
+      event.preventDefault();      
       markers.clearLayers();
 
-    }
+      $('#resultsList').empty();
+
+      markerMap = {};
+
+  }); 
+
+
+  $(document).on('click', '.listItem', function() {
+
+     var id = $(this).attr('value');
+
+     var marker = markerMap[id];
+
+     marker.openPopup();
+
+     map.panTo(new L.LatLng( marker.getLatLng().lat, marker.getLatLng().lng), 8);
+
+  });
+
+
+  var gotoMarker = function(id) {
+
+     var marker = markerMap[id];
+
+     marker.openPopup();
+
+     map.panTo(new L.LatLng( marker.getLatLng().lat, marker.getLatLng().lng), 8);
+
+  }
+
 
   var buildList = function(arr) {
 
     for(var i = 0; i < arr.length; i++) {
       
       var item = $('<div class="list-group-item listItem">');
+      item.attr('value', arr[i]._id);
       var name = $('<h3>').css('font-style', 'italic').html(arr[i].properties.vesslterms);
       var desc = $('<h5>').css('font-style', 'initial').html(arr[i].properties.history);
 
@@ -39,7 +68,6 @@ $(document).ready(function() {
   }
 
 
-  $('#clearMarkers').on('click', clearMarkers); 
 
   $('#openNav').on('click', function() {
     nav.css('width', '30%');
@@ -58,6 +86,8 @@ $(document).ready(function() {
 
     var name = $('#nameSearch').val().trim();
 
+    var string = $('#textSearch').val().trim();
+
     var lat = $('#latitudeSearch').val().trim();
     var lon = $('#longitudeSearch').val().trim();
     var radius = $('#radiusSearch').val().trim();
@@ -70,28 +100,75 @@ $(document).ready(function() {
 
     var id = $('#idSearch').val().trim();
 
+
+
+
     if(id) {
 
-      console.log(id);
-
       $.ajax({
-        url: '/id',
+
+        url: 'http://www.rednightsky.com/id',
         method: 'GET',
         data: {
           id: id
         }
+
       }).done(function(res) {
 
         console.log(res);
 
-        var marker = L.marker( [ res.geometry.coordinates[1], res.geometry.coordinates[0] ]).addTo(map);
+        markerMap = {};
+
+        var markerGroup = [];
+
+        var marker = L.marker( [ res.geometry.coordinates[1], res.geometry.coordinates[0] ]);
 
         marker.bindPopup('<h3><em>' + res.properties.vesslterms +'</em></h3>' + res.properties.history);
     
-        //marker[]
+        markerGroup.push(marker);
+
+        markerMap[res._id] = marker;
+
+        markers = L.layerGroup(markerGroup);
+
+        map.addLayer(markers);
+
+        buildList(res);
 
       })
-    }
+    
+    } else 
+
+      {
+
+        $.ajax({
+          url: 'http://www.rednightsky.com/wreck',
+          method: 'GET',
+          data: {
+
+            location: {
+                lat: lat,
+                lon: lon,
+                radius: radius  
+              },
+
+              before: before,
+              after: after,
+
+              hasName: hadName,
+
+              string: 'Sailing'
+
+  }
+
+
+        }).done(function(res) {
+
+        })
+
+      }
+
+
 
   })
 
@@ -101,7 +178,7 @@ $(document).ready(function() {
 
   $.ajax({
 
-   url: '/string',
+   url: 'http://www.rednightsky.com/string',
    method: 'GET',
    data: {
      string: 'submarine'
@@ -109,7 +186,7 @@ $(document).ready(function() {
 
     }).done(function(res) {
 
-      markerIds = {};
+      markerMap = {};
 
       var markerGroup = [];
 
@@ -120,7 +197,7 @@ $(document).ready(function() {
       
         markerGroup.push(marker);
 
-        markerIds[res[i]._id] = marker;
+        markerMap[res[i]._id] = marker;
 
       }
 

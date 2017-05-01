@@ -26,15 +26,6 @@ body {
     padding-top: 60px;
 }
 
-#sideNav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
-}
-
 #openNav {
 	position: fixed;
 	top: 0%;
@@ -73,4 +64,10 @@ body {
 
 #resultsList {
     margin: 2% 6%; 
+}
+
+.listItem:hover {
+
+    background-color: lightblue;
+
 }
