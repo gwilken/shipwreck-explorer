@@ -75,7 +75,7 @@ $(document).ready(function() {
       console.log(id);
 
       $.ajax({
-        url: '/id',
+        url: 'http://www.rednightsky.com/id',
         method: 'GET',
         data: {
           id: id
@@ -101,14 +101,14 @@ $(document).ready(function() {
 
   $.ajax({
 
-   url: '/string',
+   url: 'http://www.rednightsky.com/string',
    method: 'GET',
    data: {
      string: 'submarine'
    }
 
     }).done(function(res) {
-
+      console.log(res);
       markerIds = {};
 
       var markerGroup = [];
@@ -116,7 +116,7 @@ $(document).ready(function() {
       for(var i = 0; i < res.length; i++) {
       
         var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
-        marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history);
+        marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history + '<br><button id="' + res[i]._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add to Favorites</button>');
       
         markerGroup.push(marker);
 

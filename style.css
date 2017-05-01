@@ -2,6 +2,7 @@
 body {
 	margin:0;
 	padding:0;
+    position: relative;
 	}
     
 #map { 
@@ -73,4 +74,32 @@ body {
 
 #resultsList {
     margin: 2% 6%; 
+}
+
+.favorites {
+    width: 30%;
+    max-height: 300px;
+    background-color: white;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 11;
+    overflow: scroll;
+    border-radius: 3%;
+}
+
+.fav-heading {
+    background-color: darkgray;
+    color: white;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+
+.fav-wreck {
+    border: 1px solid gray;
+}
+
+.fav-wreck, .fav-heading {
+    padding: 5px;
 }
