@@ -1,0 +1,152 @@
+<html>
+<head>
+  <meta charset=utf-8 />
+  <title>Lost</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
+  <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
+
+  <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="index.js"></script>
+  <script type ="text/javascript" src="assets/javascript/app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <p id="openNav">&#9776;</p>
+
+
+  <div id="sideNav">
+   
+    <p id="closeNav">&times;</p>
+
+      <form id="loginForm" class="form-inline">
+        <label for="emailInput">Email</label>
+        <p class="help-block">Login to remember your favorites.</p>
+          
+          <div class="form-group">
+            <label class="sr-only" for="emailInput">Email address</label>
+            <input type="email" class="email form-control" id="emailInput" placeholder="Email">
+          </div>
+
+          <div class="checkbox">
+  
+          </div>
+
+          <button type="submit" class="sign-in btn btn-default">Sign in</button>
+          
+          <div class="checkbox">
+            <label>
+              <input id="rememberMe" type="checkbox"> Remember Me
+            </label>
+         
+          </div>
+      </form>
+
+    <br>
+
+    <form id="searchForm">
+
+      <div class="form-group">
+        <label for="nameSearch">Vessel Name</label>
+        <p class="help-block">Know the name of the ship? Search for it directly</p>
+        <input type="text" class="form-control" id="nameSearch" placeholder="Star of Hollywood">
+      </div>
+
+      <div class="form-group">
+        <label for="textSearch">Text</label>
+        <p class="help-block">Search the historical description for interesting finds</p>
+        <input type="text" class="form-control" id="textSearch" placeholder="submarine">
+      </div>
+
+      <div class="form-group">
+        <label>Position</label>
+        <p class="help-block">Search for wrecks near a given location</p>
+        <input type="number" class="form-control" id="latitudeSearch" placeholder="Latitude">      
+        <input type="number" class="form-control" id="longitudeSearch" placeholder="Longitude">        
+        <input type="number" class="form-control" id="radiusSearch" placeholder="Radius (in miles)">
+      </div>
+
+
+      <label>Year Sunk</label>
+      <p class="help-block">Many wrecks do not have year sunk data. This will drastically limit your hits</p>
+      <div class="form-group">
+        <label for="afterRangeSearch">After</label>
+        <input type="number" class="form-control" id="afterRangeSearch" placeholder="1910">      
+      </div>
+
+      <div class="form-group">
+        <label for="beforeRangeSearch">Before</label>
+        <input type="number" class="form-control" id="beforeRangeSearch" placeholder="2010">      
+      </div>
+
+      <div class="form-group">
+        <label for="idSearch">Unique Record ID</label>
+        <p class="help-block">Search the database by specific ID. This will override any other search parameters</p>
+
+        <input type="text" class="form-control" id="idSearch" placeholder="59038085f857488a9a719176">
+      </div>
+
+      <div class="form-group">
+        <p class="help-block">Only show wrecks that</p>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input id="hasName" type="checkbox"> Have a name (there are many unknown wrecks)
+        </label>
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input id="hasHistory" type="checkbox"> Have historical information
+        </label>
+      </div>
+
+      <br>     
+
+      <button id="searchSubmit" type="submit" class="btn btn-primary btn-block">Search</button>
+    
+      <button id="clearMarkers" class="btn btn-default btn-block">Clear Current Hits</button>
+
+      </form>
+
+      <br><br>
+
+
+      <div id='results'>
+
+        <div class="panel panel-default">
+          
+          <div class="panel-heading">
+            <h3 class="panel-title">Search Results</h3>
+          </div>
+          
+          <div class="panel-body">
+               
+               <div id="resultsList" class="list-group"></div>
+
+          </div>
+        </div>
+
+      </div>
+
+     </div>
+      <div class="favorites">
+      <div class="fav-heading">
+        <span>Favorites:</span>
+        <button class="fav-collapse btn btn-default btn-xs">Collapse</button>
+      </div>
+     </div>
+
+
+</body>
+</html>
