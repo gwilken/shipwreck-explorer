@@ -8,6 +8,7 @@ $(document).ready(function() {
   var markers;
 
   var markerMap = {};
+  var markerGroup = [];
 
   var nav = $('#sideNav');
 
@@ -136,11 +137,11 @@ $(document).ready(function() {
 
         markerMap = {};
 
-        var markerGroup = [];
+        markerGroup = [];
 
         var marker = L.marker( [ res.geometry.coordinates[1], res.geometry.coordinates[0] ]);
 
-        marker.bindPopup('<h3><em>' + res.properties.vesslterms +'</em></h3>' + res.properties.history);
+        marker.bindPopup('<h3><em>' + res.properties.vesslterms +'</em></h3>' + res.properties.history + '<br><button id="' + res._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add to Favorites</button>');
     
         markerGroup.push(marker);
 
@@ -182,12 +183,12 @@ $(document).ready(function() {
 
                 markerMap = {};
 
-                var markerGroup = [];
+                markerGroup = [];
 
                 for(var i = 0; i < res.length; i++) {
                 
                   var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
-                  marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history);
+                  marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history + '<br><button id="' + res[i]._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add to Favorites</button>');
                 
                   markerGroup.push(marker);
 
@@ -204,10 +205,47 @@ $(document).ready(function() {
             })
 
       }
+
+
       
   })
 
+      $(document).on("click", ".go-map", function() {
+        var id = $(this).attr("data-id");
 
+$.ajax({
+
+        url: 'http://www.rednightsky.com/id',
+        method: 'GET',
+        data: {
+          id: id
+        }
+
+      }).done(function(res) {
+
+        console.log(res);
+
+        var marker = L.marker( [ res.geometry.coordinates[1], res.geometry.coordinates[0] ]);
+
+        map.panTo(new L.LatLng( marker.getLatLng().lat, marker.getLatLng().lng), 8);
+
+        marker.openPopup();
+
+        marker.bindPopup('<h3><em>' + res.properties.vesslterms +'</em></h3>' + res.properties.history + '<br><button id="' + res._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add to Favorites</button>');
+
+        markerGroup.push(marker);
+
+        markerMap[res._id] = marker;
+
+        markers = L.layerGroup(markerGroup);
+
+        map.addLayer(markers);
+
+        buildList(res);
+
+      })
+        
+      })
 
 
 
