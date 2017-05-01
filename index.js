@@ -5,10 +5,41 @@ $(document).ready(function() {
   var map = L.map('map').setView([34, -85], 5);
   L.esri.basemapLayer('Oceans').addTo(map);
 
+  var markers;
 
+  var markerIds = {};
 
   var nav = $('#sideNav');
 
+
+  var clearMarkers = function(event) {
+
+      event.preventDefault();
+      
+      markers.clearLayers();
+
+    }
+
+  var buildList = function(arr) {
+
+    for(var i = 0; i < arr.length; i++) {
+      
+      var item = $('<div class="list-group-item listItem">');
+      var name = $('<h3>').css('font-style', 'italic').html(arr[i].properties.vesslterms);
+      var desc = $('<h5>').css('font-style', 'initial').html(arr[i].properties.history);
+
+      name.append(desc);
+
+      item.html(name);
+
+      $('#resultsList').append(item);
+
+    }
+
+  }
+
+
+  $('#clearMarkers').on('click', clearMarkers); 
 
   $('#openNav').on('click', function() {
     nav.css('width', '30%');
@@ -57,10 +88,10 @@ $(document).ready(function() {
 
         marker.bindPopup('<h3><em>' + res.properties.vesslterms +'</em></h3>' + res.properties.history);
     
-      })
-    
-    }
+        //marker[]
 
+      })
+    }
 
   })
 
@@ -78,21 +109,26 @@ $(document).ready(function() {
 
     }).done(function(res) {
 
-    
+      markerIds = {};
+
       var markerGroup = [];
 
-    for(var i = 0; i < res.length; i++) {
-    
-      var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
-      marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history);
-    
-      markerGroup.push(marker);
+      for(var i = 0; i < res.length; i++) {
+      
+        var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
+        marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history);
+      
+        markerGroup.push(marker);
 
-    }
+        markerIds[res[i]._id] = marker;
 
-    var markers = L.layerGroup(markerGroup);
+      }
 
-    map.addLayer(markers);
+      markers = L.layerGroup(markerGroup);
+
+      map.addLayer(markers);
+
+      buildList(res);
 
   });
 

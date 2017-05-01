@@ -25,7 +25,26 @@
   <div id="sideNav">
    
     <p id="closeNav">&times;</p>
-    
+
+      <form id="loginForm" class="form-inline">
+
+        <p class="help-block">Login to remember your favorites.</p>
+
+          <div class="form-group">
+            <label class="sr-only" for="emailInput">Email address</label>
+            <input type="email" class="form-control" id="emailInput" placeholder="Email">
+          </div>
+
+          <div class="checkbox">
+  
+          </div>
+
+          <button type="submit" class="btn btn-default">Sign in</button>
+        
+      </form>
+
+    <br>
+
     <form id="searchForm">
 
       <div class="form-group">
@@ -78,33 +97,39 @@
         <input type="text" class="form-control" id="idSearch" placeholder="59038085f857488a9a719176">
       </div>
 
-      <button id="searchSubmit" type="submit" class="btn btn-primary">Submit</button>
+      <button id="searchSubmit" type="submit" class="btn btn-primary btn-block">Search</button>
     
-      <br><br>
+      <button id="clearMarkers" class="btn btn-default btn-block">Clear Current Hits</button>
 
-      <form id="loginForm" class="form-inline">
-
-        <p class="help-block">Login to remember your favorites.</p>
-
-          <div class="form-group">
-            <label class="sr-only" for="exampleInputEmail3">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Email">
-          </div>
-
-          <div class="checkbox">
-            <label>
-              <input type="checkbox"> Remember me
-            </label>
-          </div>
-
-          <button type="submit" class="btn btn-default">Sign in</button>
-        
       </form>
 
-  </div>
+      <br><br>
 
 
-    </form>
+      <div id='results'>
+
+        <div class="panel panel-default">
+          
+          <div class="panel-heading">
+            <h3 class="panel-title">Search Results</h3>
+          </div>
+          
+          <div class="panel-body">
+               
+               <div id="resultsList" class="list-group"></div>
+
+          </div>
+        </div>
+
+      </div>
+
+     </div>
+
+ 
+
+
+
+
 
 
 </body>
