@@ -175,8 +175,12 @@ $(document).ready(function() {
                 for(var i = 0; i < res.length; i++) {
                 
                   var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
-                  marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history + '<br><button id="' + res[i]._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add to Favorites</button>');
-                
+                  marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history + 
+                    '<br><button id="' + res[i]._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add to Favorites</button>'
+                    + '<br><button id="times-' + i +'" class="times btn btn-default btn-xs"><span class="glyphicon glyphicon-folder-open"></span> NYTimes </button>'
+                    + '<button id="wiki-' + i + '" class="wiki btn btn-default btn-xs"><span class="glyphicon glyphicon-education"></span> Wikipedia </button>'
+                    + '<button id="congress-' + i + '" class="congress btn btn-default btn-xs"><span class="glyphicon glyphicon-duplicate"></span> Library of Congress </button>');
+
                   markerGroup.push(marker);
 
                   markerMap[res[i]._id] = marker;
@@ -195,7 +199,7 @@ $(document).ready(function() {
 
 
       
-  })
+  });
 
       $(document).on("click", ".go-map", function() {
         var id = $(this).attr("data-id");
@@ -230,9 +234,9 @@ $.ajax({
 
         buildList(res);
 
-      })
+      });
         
-      })
+      });
 
 
 

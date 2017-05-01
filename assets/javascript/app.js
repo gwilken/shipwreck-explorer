@@ -1,3 +1,5 @@
+var dateRegEx = /((0?[1-9]|10|11|12)(-|\/)([0-9]|(0[0-9])|([12])([0-9]?)|(3[01]?))(-|\/)((\d{4})|(\d{2}))|(0?[2469]|11)(-|\/)((0[0-9])|([12])([0-9]?)|(3[0]?))(-|\/)((\d{4}|\d{2})))/g;
+
 $(document).ready(function() {
 
     // Initialize Firebase
@@ -16,6 +18,8 @@ $(document).ready(function() {
     var email;
     var userToggle = false;
     var collapseToggle = false;
+    var archiveToggle = false;
+    var archiveSource = null;
 
     $(".favorites").hide();
 
@@ -34,8 +38,8 @@ $(document).ready(function() {
             if (test.val() != null) {
                 pullFavorites();
             }
-        })
-    })
+        });
+    });
 
     /*$(document).on("click", ".sign-out", function() {
         event.preventDefault();
@@ -62,8 +66,7 @@ $(document).ready(function() {
             console.log(name);
             p.append(name).append(history).append(lat).append(lng).append(gomap).append(remove);
             $(".favorites").append(p);
-
-        })
+        });
     }
 
 
@@ -98,8 +101,8 @@ $(document).ready(function() {
                         latitude: lat,
                         longitude: lng,
                         id: id
-                    })
-                })
+                    });
+                });
                 pullFavorites();
             }
         })
@@ -111,7 +114,7 @@ $(document).ready(function() {
           database.ref("/users/" + email + "/" + key).remove();
           pullFavorites();
         }
-    })
+    });
 
     $(document).on("click", ".fav-collapse", function() {
         if (collapseToggle === false) {
@@ -123,7 +126,37 @@ $(document).ready(function() {
             $(".fav-collapse").html("Collapse");
             collapseToggle = false;
         }
-    })
+    });
+    
+    $(document).on("click", ".times", function(){
+        let floatymcfloaterson = $(this).parent();
+        console.log(floatymcfloaterson);
+        let boatName = floatymcfloaterson[0].childNodes[0].innerText;
+        console.log(boatName);
+        let wreckData = floatymcfloaterson[0].childNodes[1].wholeText;
+        console.log(wreckData);
+        let dates = wreckData.match(dateRegEx);
+        console.log(dates);
 
+        if(dates!==null){
+            if(dates.length == 2){
+                var sinkDate = dates[0];
+                var foundDate = dates[1];
+            }
+            else{
+                dates = wreckData.match("sunk " + dateRegEx);
+                console.log(dates);
+                sinkDate = dates[0];
+            }
 
-})
+        }
+    });
+
+    $(document).on("click", ".wiki", function(){
+        let index = $(this).id.split("-")[1];
+    });
+    
+    $(document).on("click", ".wiki", function(){
+        let index = $(this).id.split("-")[1];
+    });
+});

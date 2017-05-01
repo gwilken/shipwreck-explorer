@@ -11,11 +11,15 @@
   <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
   <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
 
-  <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
-  <script type="text/javascript" src="index.js"></script>
+  <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"> 
+  </script>
+  <script type="text/javascript" src="index.js"></script>      
+  <script type="text/javascript" src="./logic.js"></script>
   <script type ="text/javascript" src="assets/javascript/app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
-
 </head>
 <body>
 
@@ -134,14 +138,18 @@
       </div>
 
      </div>
-
-      <div class="favorites">
-      <div class="fav-heading">
-        <span>Favorites:</span>
-        <button class="fav-collapse btn btn-default btn-xs">Collapse</button>
+     <div class="archives">
+      <div class="arch-heading">
+        <span>Archives:</span>
+        <button class="arch-collapse btn btn-default btn-xs">Collapse</button>
       </div>
      </div>
 
-
+      <div class="favorites">
+        <div class="fav-heading">
+          <span>Favorites:</span>
+          <button class="fav-collapse btn btn-default btn-xs">Collapse</button>
+        </div>
+      </div>
 </body>
 </html>

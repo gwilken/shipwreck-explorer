@@ -81,9 +81,9 @@ function wikiQuery(searchTerm){
 	})
 }
 
-wikiQuery("Kevin Bacon");
+wikiQuery("USS Bone");
 
-congressQuery("Donald Trump", null, null);
+
 
 
 
