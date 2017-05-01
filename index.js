@@ -37,6 +37,19 @@ $(document).ready(function() {
   });
 
 
+  map.on('dblclick', function(e) {
+
+    var popupContent = '<h4>'+e.latlng.lat+' '+e.latlng.lng+'</h4><h5>search within x miles...</h5>';
+
+
+   var popup = L.popup()
+    .setLatLng(e.latlng)
+    .setContent(popupContent)
+    .openOn(map);
+  
+  });
+
+
   var gotoMarker = function(id) {
 
      var marker = markerMap[id];
@@ -96,7 +109,7 @@ $(document).ready(function() {
 
     var lat = $('#latitudeSearch').val().trim();
     var lon = $('#longitudeSearch').val().trim();
-    var radius = $('#radiusSearch').val().trim();
+    var radius = $('#radiusSearch').val().trim() * 1609;
 
     var after = $('#afterRangeSearch').val().trim();
     var before = $('#beforeRangeSearch').val().trim();
