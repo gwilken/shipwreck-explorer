@@ -84,6 +84,12 @@ $(document).ready(function() {
 
     event.preventDefault();
 
+    markers.clearLayers();
+
+    $('#resultsList').empty();
+
+    markerMap = {};
+
     var name = $('#nameSearch').val().trim().toUpperCase();
 
     var string = $('#textSearch').val().trim();
