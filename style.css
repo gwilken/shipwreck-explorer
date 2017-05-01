@@ -55,11 +55,11 @@ body {
 }
 
 #searchForm {
-	margin: 2% 6%;
+	margin: 0% 6%;
 }
 
 #loginForm {
-    margin: 2% 6%;
+    margin: 0% 6%;
 }
 
 #resultsList {
@@ -68,6 +68,6 @@ body {
 
 .listItem:hover {
 
-    background-color: lightblue;
+    background-color: #D6EAF8;
 
 }

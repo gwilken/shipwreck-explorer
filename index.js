@@ -84,7 +84,7 @@ $(document).ready(function() {
 
     event.preventDefault();
 
-    var name = $('#nameSearch').val().trim();
+    var name = $('#nameSearch').val().trim().toUpperCase();
 
     var string = $('#textSearch').val().trim();
 
@@ -152,62 +152,80 @@ $(document).ready(function() {
                 radius: radius  
               },
 
+              name: name,
+
               before: before,
               after: after,
 
-              hasName: hadName,
+              hasName: hasName,
 
-              string: 'Sailing'
+              string: string
+          }
+          }).done(function(res) {
 
-  }
+                markerMap = {};
 
+                var markerGroup = [];
 
-        }).done(function(res) {
+                for(var i = 0; i < res.length; i++) {
+                
+                  var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
+                  marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history);
+                
+                  markerGroup.push(marker);
 
-        })
+                  markerMap[res[i]._id] = marker;
+
+                }
+
+                markers = L.layerGroup(markerGroup);
+
+                map.addLayer(markers);
+
+                buildList(res);
+
+            })
 
       }
-
-
-
+      
   })
 
 
 
 
 
-  $.ajax({
+  // $.ajax({
 
-   url: 'http://www.rednightsky.com/string',
-   method: 'GET',
-   data: {
-     string: 'submarine'
-   }
+  //  url: 'http://www.rednightsky.com/string',
+  //  method: 'GET',
+  //  data: {
+  //    string: 'submarine'
+  //  }
 
-    }).done(function(res) {
+  //   }).done(function(res) {
 
-      markerMap = {};
+  //     markerMap = {};
 
-      var markerGroup = [];
+  //     var markerGroup = [];
 
-      for(var i = 0; i < res.length; i++) {
+  //     for(var i = 0; i < res.length; i++) {
       
-        var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
-        marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history);
+  //       var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
+  //       marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history);
       
-        markerGroup.push(marker);
+  //       markerGroup.push(marker);
 
-        markerMap[res[i]._id] = marker;
+  //       markerMap[res[i]._id] = marker;
 
-      }
+  //     }
 
-      markers = L.layerGroup(markerGroup);
+  //     markers = L.layerGroup(markerGroup);
 
-      map.addLayer(markers);
+  //     map.addLayer(markers);
 
-      buildList(res);
+  //     buildList(res);
 
-  });
+  // });
 
 
 

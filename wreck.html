@@ -27,7 +27,7 @@
     <p id="closeNav">&times;</p>
 
       <form id="loginForm" class="form-inline">
-
+        <label for="emailInput">Email</label>
         <p class="help-block">Login to remember your favorites.</p>
 
           <div class="form-group">
@@ -49,12 +49,13 @@
 
       <div class="form-group">
         <label for="nameSearch">Vessel Name</label>
+        <p class="help-block">Know the name of the ship? Search for it directly</p>
         <input type="text" class="form-control" id="nameSearch" placeholder="Star of Hollywood">
       </div>
 
       <div class="form-group">
         <label for="textSearch">Text</label>
-        <p class="help-block">Search the historical description</p>
+        <p class="help-block">Search the historical description for interesting finds</p>
         <input type="text" class="form-control" id="textSearch" placeholder="submarine">
       </div>
 
@@ -63,13 +64,12 @@
         <p class="help-block">Search for wrecks near a given location</p>
         <input type="number" class="form-control" id="latitudeSearch" placeholder="Latitude">      
         <input type="number" class="form-control" id="longitudeSearch" placeholder="Longitude">        
-        <input type="number" class="form-control" id="radiusSearch" placeholder="Radius">
+        <input type="number" class="form-control" id="radiusSearch" placeholder="Radius (in meters)">
       </div>
 
 
       <label>Year Sunk</label>
-      <p class="help-block">Search a range (in years)</p>
-      
+      <p class="help-block">Many wrecks do not have year sunk data. This will drastically limit your hits</p>
       <div class="form-group">
         <label for="afterRangeSearch">After</label>
         <input type="number" class="form-control" id="afterRangeSearch" placeholder="1910">      
@@ -81,12 +81,19 @@
       </div>
 
       <div class="form-group">
-        <p class="help-block">Only show wrecks that:</p>
+        <label for="idSearch">Unique Record ID</label>
+        <p class="help-block">Search the database by specific ID. This will override any other search parameters</p>
+
+        <input type="text" class="form-control" id="idSearch" placeholder="59038085f857488a9a719176">
+      </div>
+
+      <div class="form-group">
+        <p class="help-block">Only show wrecks that</p>
       </div>
 
       <div class="checkbox">
         <label>
-          <input id="hasName" type="checkbox"> Have a known name
+          <input id="hasName" type="checkbox"> Have a name (there are many unknown wrecks)
         </label>
       </div>
 
@@ -96,12 +103,7 @@
         </label>
       </div>
 
-      <div class="form-group">
-        <label for="idSearch">Unique Record ID</label>
-        <p class="help-block">Search the database by specific ID. This will override other search parameters</p>
-
-        <input type="text" class="form-control" id="idSearch" placeholder="59038085f857488a9a719176">
-      </div>
+      <br>     
 
       <button id="searchSubmit" type="submit" class="btn btn-primary btn-block">Search</button>
     
