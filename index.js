@@ -84,8 +84,8 @@ $(document).ready(function() {
 
     event.preventDefault();
 
-    markers.clearLayers();
-
+    if(markers) markers.clearLayers();
+  
     $('#resultsList').empty();
 
     markerMap = {};
@@ -105,8 +105,6 @@ $(document).ready(function() {
     var hasHistory = $('#hasHistory').prop('checked');
 
     var id = $('#idSearch').val().trim();
-
-
 
 
     if(id) {
