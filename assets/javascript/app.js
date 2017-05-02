@@ -1,5 +1,5 @@
 var dateRegEx = /((0?[1-9]|10|11|12)(-|\/)([0-9]|(0[0-9])|([12])([0-9]?)|(3[01]?))(-|\/)((\d{4})|(\d{2}))|(0?[2469]|11)(-|\/)((0[0-9])|([12])([0-9]?)|(3[0]?))(-|\/)((\d{4}|\d{2})))/g;
-
+var sunkRegEx = /([Ss][Uu][Nn][Kk]) ((0?[1-9]|10|11|12)(-|\/)([0-9]|(0[0-9])|([12])([0-9]?)|(3[01]?))(-|\/)((\d{4})|(\d{2}))|(0?[2469]|11)(-|\/)((0[0-9])|([12])([0-9]?)|(3[0]?))(-|\/)((\d{4}|\d{2})))/g;
 $(document).ready(function() {
 
     // Initialize Firebase
@@ -18,11 +18,8 @@ $(document).ready(function() {
     var email;
     var userToggle = false;
     var collapseToggle = false;
-    var archiveToggle = false;
-    var archiveSource = null;
 
     $(".favorites").hide();
-
 
     $(document).on("click", ".sign-in", function() {
 
@@ -137,26 +134,64 @@ $(document).ready(function() {
         console.log(wreckData);
         let dates = wreckData.match(dateRegEx);
         console.log(dates);
-
+        var sinkDate = null;
+        var foundDate = null;
+        var leniencyDate = null;
         if(dates!==null){
             if(dates.length == 2){
                 var sinkDate = dates[0];
-                var foundDate = dates[1];
             }
             else{
-                dates = wreckData.match("sunk " + dateRegEx);
-                console.log(dates);
+                dates = wreckData.match(sunkRegEx);
                 sinkDate = dates[0];
             }
+            console.log(sinkDate);
+            let dateExpansion = sinkDate.split("/");
+            let sinkYear = dateExpansion[2];
+            if (sinkYear.length==2){
+                if(parseInt(sinkYear) < 17){
+                    sinkYear = "20" + sinkYear;
+                }else{
+                    sinkYear = "19" + sinkYear;
+                }
+            }
+            let sinkMonth = dateExpansion[0];
+            if(sinkMonth.length==1){
+                sinkMonth = "0" + sinkMonth;
+            }
+            let sinkDay = dateExpansion[1];
+            if(sinkDay.length==1){
+                sinkDay = "0" + sinkDay;
+            }
 
+            sinkDate = sinkYear + sinkMonth + sinkDay;
+            let sinkNum = parseInt(sinkDate);
+            let leniencyNum = sinkNum + 500000;
+            var leniencyDate = leniencyNum.toString();
         }
+
+        queryData = timesQuery(boatName, sinkDate, null).then(function(response){
+            console.log(response);
+        });
     });
 
+
     $(document).on("click", ".wiki", function(){
-        let index = $(this).id.split("-")[1];
+        let floatymcfloaterson = $(this).parent();
+        let boatName = floatymcfloaterson[0].childNodes[0].innerText;
+        let queryData = wikiQuery(boatName).then(function(response){
+            console.log(response);
+        });
     });
-    
-    $(document).on("click", ".wiki", function(){
-        let index = $(this).id.split("-")[1];
+
+
+    $(document).on("click", ".congress", function(){
+        let floatymcfloaterson = $(this).parent();
+        let boatName = floatymcfloaterson[0].childNodes[0].innerText;
+        let queryData = congressQuery(boatName).then(function(response){
+            console.log(response);
+        });
     });
+
+
 });
