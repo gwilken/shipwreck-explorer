@@ -15,7 +15,8 @@ $(document).ready(function() {
 
     var email;
     var userToggle = false;
-    var collapseToggle = false;
+    var favToggle = false;
+    var artToggle = false;
 
     function loggedOut() {
         $(".help-block").show();
@@ -148,34 +149,34 @@ $(document).ready(function() {
     $(".article-plus").hide();
 
     $(document).on("click", ".fav-heading", function() {
-        if (collapseToggle === false) {
+        if (favToggle === false) {
             $(".fav-plus").show();
             $(".fav-minus").hide();
             $(".fav-content").hide();
             $(".favorites").css("width", "30%");
-            collapseToggle = true;
+            favToggle = true;
         } else {
             $(".fav-plus").hide();
             $(".fav-minus").show();
             $(".fav-content").show();
             $(".favorites").css("width", "100%");
-            collapseToggle = false;
+            favToggle = false;
         }
     })
 
     $(document).on("click", ".article-heading", function() {
-        if (collapseToggle === false) {
+        if (artToggle === false) {
             $(".article-plus").show();
             $(".article-minus").hide();
             $(".article-content").hide();
             $(".articles").css("width", "30%");
-            collapseToggle = true;
+            artToggle = true;
         } else {
             $(".article-plus").hide();
             $(".article-minus").show();
             $(".article-content").show();
             $(".articles").css("width", "100%");
-            collapseToggle = false;
+            artToggle = false;
         }
     })
 
