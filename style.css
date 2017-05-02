@@ -70,9 +70,13 @@ body {
     background-color: #D6EAF8;
 }
 
+.sign-out {
+    margin-left: 10px;
+}
+
 .favorites {
     width: 30%;
-    max-height: 300px;
+    max-height: 45%;
     background-color: white;
     position: absolute;
     bottom: 10px;
@@ -83,19 +87,28 @@ body {
 }
 
 .fav-heading {
-    background-color: darkgray;
+    background-color: silver;
     color: white;
     font-weight: bold;
-    display: flex;
-    justify-content: space-between;
+    padding: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.minus, .plus {
+    float: right;
+    position: relative;
+    right: 2%;
+}
+
+.fav-content {
+    padding: 20px 40px;
 }
 
 .fav-wreck {
-    border: 1px solid gray;
-}
+    border: 1px solid lightgray;
+    padding: 15px 10px;
 
-.fav-wreck, .fav-heading {
-    padding: 5px;
 }
 
 .fav-label {

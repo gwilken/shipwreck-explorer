@@ -17,8 +17,34 @@ $(document).ready(function() {
     var userToggle = false;
     var collapseToggle = false;
 
-    $(".favorites").hide();
+    function loggedOut() {
+        $(".help-block").show();
+        $(".email").show();
+        $(".sign-in").show();
+        $(".user-confirm").hide();
+        $(".sign-out").hide();
+        $(".remember").show();
+        $(".email").attr("placeholder", "Email"); 
+        $(".favorites").hide();
+    }
 
+    function loggedIn() {
+        $(".help-block").hide();
+        $(".email").hide();
+        $(".sign-in").hide();
+        $(".user-confirm").show();
+        $(".sign-out").show();
+        $(".remember").hide();
+    }
+
+    if (localStorage.getItem("email")) {
+        email = localStorage.getItem("email");
+        $(".email").attr("placeholder", email.replace("|", "."));
+        loggedIn();
+        pullFavorites();
+    } else {
+        loggedOut();
+    }
 
     $(document).on("click", ".sign-in", function() {
 
@@ -35,33 +61,36 @@ $(document).ready(function() {
                 pullFavorites();
             }
         })
+
+        if ($("#rememberMe").prop("checked")) {
+            localStorage.clear();
+            localStorage.setItem("email", email);
+        }
+        loggedIn();
     })
 
-    /*$(document).on("click", ".sign-out", function() {
+    $(document).on("click", ".sign-out", function() {
         event.preventDefault();
         userToggle = false;
-        $(".confirm").hide();
-        $(".email").show();
-        $(".sign-in").show();
-        $(".favorites").hide();
-    })*/
+        localStorage.clear();
+        loggedOut();
+    })
 
     function pullFavorites() {
         $(".favorites").show();
-        $(".fav-heading").nextAll().remove();
+        $(".fav-content").empty();
 
         database.ref("/users/" + email).on("child_added", function(res) {
             console.log(res);
             var p = $("<p>").attr("class", "fav-wreck").attr("data-fb", res.key).attr("data-lat", res.val().latitude).attr("data-lng", res.val().longitude);
-            var name = "<p><span class='fav-label'>Name: </span>" + res.val().name + "</p>";
-            var lat = "<p><span class='fav-label'>Lat: </span>" + res.val().latitude + "</p>";
-            var lng = "<p><span class='fav-label'>Lon: </span>" + res.val().longitude + "</p>";
-            var history = "<p><span class='fav-label'>History: </span>" + res.val().history + "</p>";
-            var gomap = "<button type='button' class='go-map btn btn-info btn-sm' data-id='" + res.val().id + "'> Go To </button>";            
+            var name = "<p style='font-size: 20px'><em>" + res.val().name + "</em></p>";
+            var latlng = "<p><span class='fav-label'>Lat: </span>" + res.val().latitude + "  <span class='fav-label'>Lon: </span>" + res.val().longitude + "</p>";
+            var history = "<p>" + res.val().history + "</p>";
+            var gomap = "<button type='button' class='go-map btn btn-info btn-sm' data-id='" + res.val().id + "'> Go </button>";
             var remove = "<button type='button' class='remove btn btn-default btn-sm'><span class='glyphicon glyphicon-trash'></span> Remove </button>";
             console.log(name);
-            p.append(name).append(history).append(lat).append(lng).append(gomap).append(remove);
-            $(".favorites").append(p);
+            p.append(name).append(history).append(latlng).append(gomap).append(remove);
+            $(".fav-content").append(p);
 
         })
     }
@@ -70,12 +99,15 @@ $(document).ready(function() {
     $(document).on("click", ".favorite", function() {
 
         id = $(this).attr("id");
+        var fb_id;
+        var fb_array = [];
 
-        database.ref("/toggle").on("value", function(response) {
+        database.ref("/users/" + email).on("child_added", function(get) {
+            fb_id = get.val().id;
+            fb_array.push(fb_id);
+        })
 
-            console.log(response.val());
-            // if (response.val() === true) {
-              if (userToggle === true) {
+            if (userToggle === true & fb_array.indexOf(id) === -1) {
 
                 $.ajax({
                     url: 'http://www.rednightsky.com/id',
@@ -102,25 +134,30 @@ $(document).ready(function() {
                 })
                 pullFavorites();
             }
-        })
     });
 
     $(document).on("click", ".remove", function() {
         if (userToggle === true) {
-          var key = $(this).parent().attr("data-fb");
-          database.ref("/users/" + email + "/" + key).remove();
-          pullFavorites();
+            var key = $(this).parent().attr("data-fb");
+            database.ref("/users/" + email + "/" + key).remove();
+            pullFavorites();
         }
     })
 
-    $(document).on("click", ".fav-collapse", function() {
+    $(".plus").hide();
+
+    $(document).on("click", ".fav-heading", function() {
         if (collapseToggle === false) {
-            $(".fav-wreck").hide();
-            $(".fav-collapse").html("Expand");
+            $(".plus").show();
+            $(".minus").hide();
+            $(".fav-content").hide();
+            $(".favorites").css("width", "10%");
             collapseToggle = true;
         } else {
-            $(".fav-wreck").show();
-            $(".fav-collapse").html("Collapse");
+            $(".plus").hide();
+            $(".minus").show();
+            $(".fav-content").show();
+            $(".favorites").css("width", "30%");
             collapseToggle = false;
         }
     })

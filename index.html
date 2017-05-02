@@ -29,22 +29,22 @@
     <p id="closeNav">&times;</p>
 
       <form id="loginForm" class="form-inline">
-        <label for="emailInput">Email</label>
+        <label for="emailInput">Email</label><br>
         <p class="help-block">Login to remember your favorites.</p>
 
           <div class="form-group">
             <label class="sr-only" for="emailInput">Email address</label>
-            <input type="email" class="email form-control" id="emailInput" placeholder="Email">
+            <input type="email" required class="email form-control" id="emailInput" placeholder="Email">
           </div>
 
-          <div class="checkbox">
-  
-          </div>
+          <span class="user-confirm">You are signed in</span>
 
           <button type="submit" class="sign-in btn btn-default">Sign in</button>
+
+          <button type="submit" class="sign-out btn btn-danger btn-sm">Sign Out</button>
          
          <div class="checkbox">
-            <label>
+            <label class="remember">
               <input id="rememberMe" type="checkbox"> Remember Me
             </label>
          </div>
@@ -141,10 +141,13 @@
 
      </div>
       <div class="favorites">
-      <div class="fav-heading">
-        <span>Favorites:</span>
-        <button class="fav-collapse btn btn-default btn-xs">Collapse</button>
-      </div>
+        <div class="fav-heading">
+          <span>&#9733;   Favorites</span>
+          <span class="minus glyphicon glyphicon-minus-sign"></span>
+          <span class="plus glyphicon glyphicon-plus-sign"></span>
+        </div>
+        <div class="fav-content">
+        </div>
      </div>
 
 
