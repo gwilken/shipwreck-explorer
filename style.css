@@ -9,9 +9,12 @@ h4 {
     font-weight: normal;
 }
 
+
 #pageTitle {
+    text-align: left;
     margin: 0% 8% 8% 8%;
-    font-style: italic;   
+    font-family: 'Poppins', sans-serif;
+    font-size: 43px;
 }
 
 #map { 
@@ -74,6 +77,10 @@ h4 {
 
 #emailInput {
     width: initial;
+}
+
+#rememberMeGroup {
+    margin-top: 3%;
 }
 
 #resultsList {
@@ -159,3 +166,10 @@ h4 {
     display: initial;
     width: 25%;
 }
+
+.articles {
+    margin: 0% 1%;
+}
+
+
+
