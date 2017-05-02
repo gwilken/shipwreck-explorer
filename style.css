@@ -91,32 +91,70 @@ h4 {
     background-color: #D6EAF8;
 }
 
-.favorites {
+.sign-out {
+    margin-left: 10px;
+}
+
+.left-bar {
     width: 30%;
-    max-height: 300px;
-    background-color: white;
+    max-height: 80%;
     position: absolute;
     bottom: 10px;
     left: 10px;
     z-index: 11;
-    overflow: scroll;
+    overflow: auto;
     border-radius: 3%;
 }
 
-.fav-heading {
-    background-color: darkgray;
+.articles {
+    max-height: 100%;
+    overflow: auto;
+    background-color: white;
+
+}
+
+.article-heading {
+    background-color: silver;
     color: white;
     font-weight: bold;
-    display: flex;
-    justify-content: space-between;
+    padding: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.article-content {
+    padding: 20px 40px;
+}
+
+.favorites {
+    background-color: white;
+}
+
+.fav-heading {
+    background-color: silver;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    position: relative;
+    cursor: pointer;
+    border-bottom: 1px solid white;
+
+}
+
+.fav-minus, .fav-plus, .article-minus, .article-plus {
+    float: right;
+    position: relative;
+    right: 2%;
+}
+
+.fav-content {
+    padding: 20px 40px;
 }
 
 .fav-wreck {
-    border: 1px solid gray;
-}
+    border: 1px solid lightgray;
+    padding: 15px 10px;
 
-.fav-wreck, .fav-heading {
-    padding: 5px;
 }
 
 .fav-label {
