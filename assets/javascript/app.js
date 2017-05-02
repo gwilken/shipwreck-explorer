@@ -147,6 +147,22 @@ $(document).ready(function() {
     $(".fav-plus").hide();
     $(".article-plus").hide();
 
+    $(document).on("click", ".fav-heading", function() {
+        if (collapseToggle === false) {
+            $(".fav-plus").show();
+            $(".fav-minus").hide();
+            $(".fav-content").hide();
+            $(".favorites").css("width", "30%");
+            collapseToggle = true;
+        } else {
+            $(".fav-plus").hide();
+            $(".fav-minus").show();
+            $(".fav-content").show();
+            $(".favorites").css("width", "100%");
+            collapseToggle = false;
+        }
+    })
+
     $(document).on("click", ".article-heading", function() {
         if (collapseToggle === false) {
             $(".article-plus").show();
@@ -163,21 +179,6 @@ $(document).ready(function() {
         }
     })
 
-    $(document).on("click", ".fav-heading", function() {
-        if (collapseToggle === false) {
-            $(".fav-plus").show();
-            $(".fav-minus").hide();
-            $(".fav-content").hide();
-            $(".favorites").css("width", "30%");
-            collapseToggle = true;
-        } else {
-            $(".fav-plus").hide();
-            $(".fav-minus").show();
-            $(".fav-content").show();
-            $(".favorites").css("width", "100%");
-            collapseToggle = false;
-        }
-    })
 
 
 })
