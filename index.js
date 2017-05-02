@@ -312,11 +312,11 @@ $(document).ready(function() {
 
       var favButton = '<br><button id="' + res[i]._id + '" class="favorite btn btn-warning btn-sm"> <span class="glyphicon glyphicon-star-empty"> </span> Add Favorite </button>';
 
-      var nytButton = '<button class="times articles btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> NY Times </button>';
+      var nytButton = '<button class="times research btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> NY Times </button>';
 
-      var wikiButton = '<button class="wiki articles btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> Wikipedia</button>';
+      var wikiButton = '<button class="wiki research btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> Wikipedia</button>';
 
-      var locButton = '<button class="congress articles btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> LOC </button>';
+      var locButton = '<button class="congress research btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> LOC </button>';
 
       var swapoutMap = '<button id="swapMapButton" class="btn btn-warning btn-sm satButton">Toggle Base Map</button>';
 
