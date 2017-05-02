@@ -293,25 +293,9 @@ $(document).ready(function() {
 
       }).done(function(res) {
 
-        console.log(res);
+          buildMarkers(res);
 
-        markerMap = {};
-
-        markerGroup = [];
-
-        var marker = L.marker( [ res.geometry.coordinates[1], res.geometry.coordinates[0] ]);
-
-        marker.bindPopup('<h3><em>' + res.properties.vesslterms +'</em></h3>' + '</br><h4>' + res.geometry.coordinates[1] + ', ' + res.geometry.coordinates[0] + '</h4>' + res.properties.history + '<button id="' + res._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add Favorite</button>');
-    
-        markerGroup.push(marker);
-
-        markerMap[res._id] = marker;
-
-        markers = L.layerGroup(markerGroup);
-
-        map.addLayer(markers);
-
-        buildList(res);
+          buildList(res);
 
       })
     
