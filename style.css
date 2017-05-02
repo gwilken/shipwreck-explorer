@@ -3,7 +3,25 @@ body {
 	margin:0;
 	padding:0;
 	}
-    
+
+h4 {
+    font-style: normal;
+    font-weight: normal;
+}
+
+/*a:link {
+    color: white;
+}*/
+
+/*a:visted {
+    color: white;
+
+}
+
+a:active {
+    color: white;
+}*/
+
 #map { 
 	position: absolute;
 	top:0;
@@ -55,11 +73,15 @@ body {
 }
 
 #searchForm {
-	margin: 0% 6%;
+	margin: 0% 12%;
 }
 
 #loginForm {
-    margin: 0% 6%;
+    margin: 0% 12%;
+}
+
+#emailInput {
+    width: initial;
 }
 
 #resultsList {
@@ -104,4 +126,47 @@ body {
 
 .remove {
     margin-left: 3px;
+}
+
+.favorite {
+    margin: 4% 1%;
+}
+
+.satButton {
+    margin: 4% 0%;
+    width: 50%;
+}
+
+
+
+.form-inline .form-control {
+/*    display: flex;*/
+    width: 60%;
+}
+
+#milesInput: {
+    display: inherit;
+}
+
+#popupSearchButton {
+    margin: 0% 8%;
+}
+
+.rangeInput {
+    display: inline;
+}
+
+.range {
+    width: 20%;
+    margin-left: 1%;
+}
+#afterRangeSearch {
+    margin-right: 3%;
+    display: initial;
+    width: 25%;
+}
+
+#beforeRangeSearch {
+    display: initial;
+    width: 25%;
 }
