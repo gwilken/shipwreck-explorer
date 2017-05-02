@@ -100,6 +100,136 @@ $(document).ready(function() {
 
   });
 
+  $(document).on('click', '.times', function(event) {
+
+    event.preventDefault();    
+
+     var id = $(this).attr('value');
+
+     console.log('times', id);
+   
+    $.ajax({
+
+      url: 'http://www.rednightsky.com/id',
+      method: 'GET',
+      data: {
+        id: id
+      }
+
+    }).done(function(res) {
+
+        var searchTerm = res[0].properties.vesslterms;
+
+        var start = parseDescriptionDates(res[0].properties.history);
+
+        console.log('search', searchTerm);
+        console.log('date', start);
+
+        var timesKey = "44c44dc78c634b63b56fcceefdbc86ef";
+
+        var timesURLBase = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" +
+          timesKey + "&q=";
+      
+        let timesURL = timesURLBase;
+        timesURL += searchTerm;
+
+        $.ajax( {
+          url: timesURL,
+          method: "GET",
+          data: {
+            startDate: start,
+            endDate: null
+          }
+          }).done( function(response) {
+
+            console.log(response);
+
+          });
+      });
+
+  });
+
+  $(document).on('click', '.wiki', function(event) {
+
+    event.preventDefault();    
+    
+     var id = $(this).attr('value');
+
+     console.log('wiki', id);
+
+      $.ajax({
+
+        url: 'http://www.rednightsky.com/id',
+        method: 'GET',
+        data: {
+          id: id
+        }
+
+      }).done(function(res) {
+
+          var searchTerm = res[0].properties.vesslterms;
+
+          console.log(searchTerm);
+
+          let wikiURL = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + searchTerm + "&format=json&callback=?";
+        
+          $.ajax( {
+              url: wikiURL,       
+              type: 'GET',
+              dataType: 'json',
+              data: function(data, status, jqXHR) {
+                console.log(data);
+              }
+
+            }).done( function(response) {
+
+              console.log(response);
+
+            });
+        });
+
+  });
+
+
+  $(document).on('click', '.congress', function(event) {
+
+    event.preventDefault();    
+
+    var id = $(this).attr('value');
+  
+    console.log('congress', id);
+
+   $.ajax({
+
+        url: 'http://www.rednightsky.com/id',
+        method: 'GET',
+        data: {
+          id: id
+        }
+
+      }).done(function(res) {
+
+        let congressURL = "https://loc.gov/pictures/search/";
+        let query = res[0].properties.vesslterms;
+
+        $.getJSON(congressURL, {
+        
+          type: "search",
+          q: query.replace(/ /g, "%20"),
+          fo: 'json'
+        
+        }).done(function(res) {
+
+          console.log(res);
+
+
+        });
+
+    });
+
+  });
+
+
 
   map.on('dblclick', function(e) {
 
@@ -250,6 +380,70 @@ $(document).ready(function() {
 
   }
 
+var parseDescriptionDates = function(str) {
+
+  var dateRegEx = /((0?[1-9]|10|11|12)(-|\/)([0-9]|(0[0-9])|([12])([0-9]?)|(3[01]?))(-|\/)((\d{4})|(\d{2}))|(0?[2469]|11)(-|\/)((0[0-9])|([12])([0-9]?)|(3[0]?))(-|\/)((\d{4}|\d{2})))/g;
+  var sunkRegEx = /([Ss][Uu][Nn][Kk]) ((0?[1-9]|10|11|12)(-|\/)([0-9]|(0[0-9])|([12])([0-9]?)|(3[01]?))(-|\/)((\d{4})|(\d{2}))|(0?[2469]|11)(-|\/)((0[0-9])|([12])([0-9]?)|(3[0]?))(-|\/)((\d{4}|\d{2})))/g;
+
+  let dates = str.match(dateRegEx);
+
+        var sinkDate = null;
+
+        if(dates!==null){
+
+            if(dates.length == 2){
+                var sinkDate = dates[0];
+            }
+
+            else{
+            
+                dates = wreckData.match(sunkRegEx);
+                sinkDate = dates[0];
+            
+            }
+            
+            let dateExpansion = sinkDate.split("/");
+            let sinkYear = dateExpansion[2];
+            
+            if (sinkYear.length==2){
+
+                if(parseInt(sinkYear) < 17){
+                    sinkYear = "20" + sinkYear;
+              
+                }else{
+              
+                    sinkYear = "19" + sinkYear;
+              
+                }
+            }
+            
+            let sinkMonth = dateExpansion[0];
+            
+            if(sinkMonth.length==1){
+           
+                sinkMonth = "0" + sinkMonth;
+           
+            }
+           
+            let sinkDay = dateExpansion[1];
+           
+            if(sinkDay.length==1){
+           
+                sinkDay = "0" + sinkDay;
+           
+            }
+
+            sinkDate = sinkYear + sinkMonth + sinkDay;
+           
+            let sinkNum = parseInt(sinkDate);
+            let leniencyNum = sinkNum + 500000;
+            var leniencyDate = leniencyNum.toString();
+        }
+
+        return(sinkDate);
+
+}
+
 
   $('#openNav').on('click', function() {
     nav.css('width', '27%');
@@ -344,23 +538,23 @@ $(document).ready(function() {
       $(document).on("click", ".go-map", function() {
         var id = $(this).attr("data-id");
 
-      $.ajax({
+        $.ajax({
 
-        url: 'http://www.rednightsky.com/id',
-        method: 'GET',
-        data: {
-          id: id
-        }
+          url: 'http://www.rednightsky.com/id',
+          method: 'GET',
+          data: {
+            id: id
+          }
 
-      }).done(function(res) {
+        }).done(function(res) {
 
-        buildMarkers(res);
+          buildMarkers(res);
 
-        gotoMarker(res[0]._id);
+          gotoMarker(res[0]._id);
 
-        buildList(res);
+          buildList(res);
 
-      })
+        })
         
       })
 
