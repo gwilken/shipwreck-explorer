@@ -117,11 +117,11 @@ $(document).ready(function() {
                     }
                 }).done(function(res) {
                     console.log(res);
-                    var name = res.properties.vesslterms;
-                    var lat = res.geometry.coordinates[1];
-                    var lng = res.geometry.coordinates[0];
-                    var his = res.properties.history;
-                    var id = res._id;
+                    var name = res[0].properties.vesslterms;
+                    var lat = res[0].geometry.coordinates[1];
+                    var lng = res[0].geometry.coordinates[0];
+                    var his = res[0].properties.history;
+                    var id = res[0]._id;
                     console.log(name + lat + lng + his);
                     console.log(email);
                     database.ref("/users/" + email).push({
