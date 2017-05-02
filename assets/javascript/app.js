@@ -144,20 +144,37 @@ $(document).ready(function() {
         }
     })
 
-    $(".plus").hide();
+    $(".fav-plus").hide();
+    $(".article-plus").hide();
+
+    $(document).on("click", ".article-heading", function() {
+        if (collapseToggle === false) {
+            $(".article-plus").show();
+            $(".article-minus").hide();
+            $(".article-content").hide();
+            $(".articles").css("width", "30%");
+            collapseToggle = true;
+        } else {
+            $(".article-plus").hide();
+            $(".article-minus").show();
+            $(".article-content").show();
+            $(".articles").css("width", "100%");
+            collapseToggle = false;
+        }
+    })
 
     $(document).on("click", ".fav-heading", function() {
         if (collapseToggle === false) {
-            $(".plus").show();
-            $(".minus").hide();
+            $(".fav-plus").show();
+            $(".fav-minus").hide();
             $(".fav-content").hide();
-            $(".favorites").css("width", "10%");
+            $(".favorites").css("width", "30%");
             collapseToggle = true;
         } else {
-            $(".plus").hide();
-            $(".minus").show();
+            $(".fav-plus").hide();
+            $(".fav-minus").show();
             $(".fav-content").show();
-            $(".favorites").css("width", "30%");
+            $(".favorites").css("width", "100%");
             collapseToggle = false;
         }
     })

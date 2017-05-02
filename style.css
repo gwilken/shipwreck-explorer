@@ -74,16 +74,39 @@ body {
     margin-left: 10px;
 }
 
-.favorites {
+.left-bar {
     width: 30%;
-    max-height: 45%;
-    background-color: white;
+    max-height: 80%;
     position: absolute;
     bottom: 10px;
     left: 10px;
     z-index: 11;
-    overflow: scroll;
+    overflow: auto;
     border-radius: 3%;
+}
+
+.articles {
+    max-height: 100%;
+    overflow: auto;
+    background-color: white;
+
+}
+
+.article-heading {
+    background-color: silver;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.article-content {
+    padding: 20px 40px;
+}
+
+.favorites {
+    background-color: white;
 }
 
 .fav-heading {
@@ -93,9 +116,11 @@ body {
     padding: 10px;
     position: relative;
     cursor: pointer;
+    border-bottom: 1px solid white;
+
 }
 
-.minus, .plus {
+.fav-minus, .fav-plus, .article-minus, .article-plus {
     float: right;
     position: relative;
     right: 2%;
