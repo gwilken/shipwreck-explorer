@@ -1,9 +1,8 @@
 $(document).ready(function() {
 
-  console.log('index.js');
-
   var map = L.map('map').setView([34, -85], 5);
-  L.esri.basemapLayer('Oceans').addTo(map);
+  var currentBaseMap = 'Oceans';
+  var baseLayer = L.esri.basemapLayer(currentBaseMap).addTo(map);
 
   var markers;
 
@@ -11,6 +10,52 @@ $(document).ready(function() {
   var markerGroup = [];
 
   var nav = $('#sideNav');
+
+
+  $('#getLocation').on('click', function(event) {
+
+    event.preventDefault();    
+
+    $('#getLocation').html('Getting location...');
+
+    var options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    function success(pos) {
+
+      $('#getLocation').html('Get My Current Location');
+
+      var crd = pos.coords;
+
+      $('#latitudeSearch').val(crd.latitude);
+      $('#longitudeSearch').val(crd.longitude);
+
+      var redIcon = new L.Icon({
+        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+      });
+
+      var marker = L.marker([crd.latitude, crd.longitude], {icon: redIcon}).addTo(map);
+
+      marker.bindPopup('<h4>My Location</h4><p><span>Latitude: ' + crd.latitude + '</span><br><span>Longitude: ' + crd.longitude + '</span></p>');
+
+    };
+
+    function error(err) {
+      $('#getLocation').html("Can't get current location.");
+      console.warn('error on get current position', err.code, err.message);
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+
+  })
 
 
   $('#clearMarkers').on('click', function(event) {
@@ -38,17 +83,153 @@ $(document).ready(function() {
   });
 
 
+  $(document).on('click', '#swapMapButton', function(event) {
+    
+    event.preventDefault();     
+
+    if(currentBaseMap === 'Oceans') {
+      currentBaseMap = 'Imagery';
+      setBasemap(currentBaseMap);
+
+    } else {
+      
+      currentBaseMap = 'Oceans';
+      setBasemap(currentBaseMap);
+
+    }
+
+  });
+
+
   map.on('dblclick', function(e) {
 
-    var popupContent = '<h4>'+e.latlng.lat+' '+e.latlng.lng+'</h4><h5>search within x miles...</h5>';
-
-
-   var popup = L.popup()
-    .setLatLng(e.latlng)
-    .setContent(popupContent)
-    .openOn(map);
+    var popupSearch = '<h5> Latitude: ' + e.latlng.lat + '</br> Longitude: ' + e.latlng.lng + '</h5><form id="searchPopup" class="form-inline"> <p class="help-block">Search for wrecks within</p> <div class="form-group"><input type="number" class="form-control" id="milesInput" placeholder="50 miles"><button id="popupSearchButton" type="submit" class="btn btn-primary">Go</button> </div> </form>'
+    
+    var popup = L.popup()
+      .setLatLng(e.latlng)
+      .setContent(popupSearch)
+      .openOn(map);
   
+
+    $('#popupSearchButton').on('click', function(event) {
+      
+      map.closePopup();
+
+      event.preventDefault();     
+
+      var mileRadius = $('#milesInput').val().trim();
+      
+      if(markers) {
+        markers.clearLayers();
+      }
+
+      $('#resultsList').empty();
+
+      markerMap = {};
+
+      $.ajax({
+
+        url: 'http://www.rednightsky.com/proximity',
+        method: 'GET',
+          data: {
+            lat: e.latlng.lat,
+            lon: e.latlng.lng,
+            radius: mileRadius * 1609
+          } 
+
+      }).done(function(res) {
+
+          buildMarkers(res);
+
+          buildList(res);
+
+        });
+
+      }); 
+
   });
+
+
+  function setBasemap(basemap) {
+      
+      console.log(baseLayer);
+
+      if (baseLayer) {
+        map.removeLayer(baseLayer);
+      }
+
+      baseLayer = L.esri.basemapLayer(basemap);
+
+      map.addLayer(baseLayer);
+
+    }
+
+
+  var buildMarkers = function(res) {
+
+    markerMap = {};
+
+    markerGroup = [];
+
+
+    for(var i = 0; i < res.length; i++) {
+          
+      var name = res[i].properties.vesslterms;
+      
+      var location = res[i].geometry.coordinates[1] + ',' + res[i].geometry.coordinates[0];
+
+      var history = res[i].properties.history;
+
+      var favButton = '<br><button id="' + res[i]._id + '" class="favorite btn btn-success btn-sm"> <span class="glyphicon glyphicon-star-empty"> </span> Add Favorite </button>';
+
+      var swapoutMap = '<button id="swapMapButton" class="btn btn-warning btn-sm satButton">Toggle Base Map</button>';
+
+
+      if(name === '') name = 'Not Named';
+
+      if(history === '') history = 'No known history in database'
+
+
+      var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
+
+      marker.bindPopup('<h3><em>' + name + '</em></h3><h4>' + location + '</h4>' + history + favButton + swapoutMap);
+    
+      markerGroup.push(marker);
+
+      markerMap[res[i]._id] = marker;
+
+    }
+
+    markers = L.layerGroup(markerGroup);
+
+    map.addLayer(markers);
+
+  };
+
+
+  var buildList = function(res) {
+
+    for(var i = 0; i < res.length; i++) {
+      
+      var item = $('<div class="list-group-item listItem">');
+      
+      item.attr('value', res[i]._id);
+      
+      var name = $('<h3>').css('font-style', 'italic').html(res[i].properties.vesslterms);
+      
+      var location = $('<h4>').html(res[i].geometry.coordinates[1] + ', ' + res[i].geometry.coordinates[0]); 
+      
+      var desc = $('<div>').css('font-style', 'initial').html(res[i].properties.history);
+
+      item.append(name);
+      item.append(location);
+      item.append(desc);
+
+      $('#resultsList').append(item);
+
+    }
+
+  };
 
 
   var gotoMarker = function(id) {
@@ -62,29 +243,8 @@ $(document).ready(function() {
   }
 
 
-  var buildList = function(arr) {
-
-    for(var i = 0; i < arr.length; i++) {
-      
-      var item = $('<div class="list-group-item listItem">');
-      item.attr('value', arr[i]._id);
-      var name = $('<h3>').css('font-style', 'italic').html(arr[i].properties.vesslterms);
-      var desc = $('<h5>').css('font-style', 'initial').html(arr[i].properties.history);
-
-      name.append(desc);
-
-      item.html(name);
-
-      $('#resultsList').append(item);
-
-    }
-
-  }
-
-
-
   $('#openNav').on('click', function() {
-    nav.css('width', '30%');
+    nav.css('width', '27%');
   });
 
 
@@ -141,7 +301,7 @@ $(document).ready(function() {
 
         var marker = L.marker( [ res.geometry.coordinates[1], res.geometry.coordinates[0] ]);
 
-        marker.bindPopup('<h3><em>' + res.properties.vesslterms +'</em></h3>' + res.properties.history + '<br><button id="' + res._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add to Favorites</button>');
+        marker.bindPopup('<h3><em>' + res.properties.vesslterms +'</em></h3>' + '</br><h4>' + res.geometry.coordinates[1] + ', ' + res.geometry.coordinates[0] + '</h4>' + res.properties.history + '<button id="' + res._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add Favorite</button>');
     
         markerGroup.push(marker);
 
@@ -181,39 +341,18 @@ $(document).ready(function() {
           }
           }).done(function(res) {
 
-                markerMap = {};
+              buildMarkers(res);
 
-                markerGroup = [];
-
-                for(var i = 0; i < res.length; i++) {
-                
-                  var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
-                  marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history + '<br><button id="' + res[i]._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add to Favorites</button>');
-                
-                  markerGroup.push(marker);
-
-                  markerMap[res[i]._id] = marker;
-
-                }
-
-                markers = L.layerGroup(markerGroup);
-
-                map.addLayer(markers);
-
-                buildList(res);
+              buildList(res);
 
             })
-
       }
-
-
-      
   })
 
       $(document).on("click", ".go-map", function() {
         var id = $(this).attr("data-id");
 
-$.ajax({
+      $.ajax({
 
         url: 'http://www.rednightsky.com/id',
         method: 'GET',
@@ -246,190 +385,6 @@ $.ajax({
       })
         
       })
-
-
-
-  // $.ajax({
-
-  //  url: 'http://www.rednightsky.com/string',
-  //  method: 'GET',
-  //  data: {
-  //    string: 'submarine'
-  //  }
-
-  //   }).done(function(res) {
-
-  //     markerMap = {};
-
-  //     var markerGroup = [];
-
-  //     for(var i = 0; i < res.length; i++) {
-      
-  //       var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
-  //       marker.bindPopup('<h3><em>' + res[i].properties.vesslterms +'</em></h3>' + res[i].properties.history);
-      
-  //       markerGroup.push(marker);
-
-  //       markerMap[res[i]._id] = marker;
-
-  //     }
-
-  //     markers = L.layerGroup(markerGroup);
-
-  //     map.addLayer(markers);
-
-  //     buildList(res);
-
-  // });
-
-
-
-
-//EXTERNAL VERSION
-
-  // function initMap() {
-  //   var myLatLng = {lat: -25.363, lng: 131.044};
-
-  //   var map = new google.maps.Map(document.getElementById('map'), {
-  //     zoom: 4,
-  //     center: myLatLng
-  //   });
-
-  //   var marker = new google.maps.Marker({
-  //     position: myLatLng,
-  //     map: map,
-  //     title: 'Hello World!'
-  //   });
-  // }
-
- // var miles = 100 * 1609;
-
-	// $.ajax({
-
-	// 	url: '/proximity',
-	// 	method: 'GET',
-	// 	data: {
-	// 		lat: 33.998014,
-	// 		lon: -118.823274,
-	// 		radius: 50000
-	// 	}
-
-	// }).done(function(res){
-
-	// 	console.log(res);
-
-	// 	});
-
-
-// $.ajax({
-
-// 	url: '/string',
-// 	method: 'GET',
-// 	data: {
-// 		string: 'submarine'
-// 	}
-
-// }).done(function(res) {
-
-// 	console.log(res);
-
-// });
-
-// $.ajax({
-
-// 	url: 'http://127.0.0.1/id',
-// 	method: 'GET',
-// 	data: {
-// 		id: "59038085f857488a9a719176"
-// 	}
-
-// }).done(function(res) {
-
-// 	console.log(res);
-
-// });
-
-
-// $.ajax({
-
-//   url: 'http://127.0.0.1/wreck',
-//   method: 'GET',
-//   data: {
-
-//     location: {
-
-//       lat: 33.998014,
-//       lon: -118.823274,
-//       radius: 50000
-
-//     },
-      
-//       hasName: 1
-
-//   }
-// }).done(function(res) {
-
-//   console.log(res);
-
-//  });
-
-
-
-
-
-//http://www.rednightsky.com/id?id=59038085f857488a9a719176
-
-// $.ajax({
-
-// 	url: '/range',
-// 	method: 'GET',
-// 	data: {
-// 		before: '1950',
-// 		after: '1900'
-// 	}
-
-// }).done(function(res) {
-
-// 	console.log(res);
-
-// });
-
-// $.ajax({
-
-// 	url: '/hasname',
-// 	method: 'GET'
-
-// }).done(function(res) {
-
-// 	console.log(res);
-
-// });
-
-
-// $.ajax({
-
-//   url: '/wreck',
-//   method: 'GET',
-//   data: {
-//     before: '1950'
-//   }
-
-// }).done(function(res) {
-
-//   console.log(res);
-
-// });
-
-
-// "59038084f857488a9a718543"
-
-    // name:
-    // proximity: {
-    //   lat:
-    //   lon:
-    //   radius:
-    // }
-
 
 
 })

@@ -23,10 +23,11 @@
 
   <p id="openNav">&#9776;</p>
 
-
   <div id="sideNav">
    
     <p id="closeNav">&times;</p>
+
+    <h1 id='pageTitle'>Tempest</h1>
 
       <form id="loginForm" class="form-inline">
         <label for="emailInput">Email</label>
@@ -37,17 +38,13 @@
             <input type="email" class="email form-control" id="emailInput" placeholder="Email">
           </div>
 
-          <div class="checkbox">
-  
-          </div>
-
           <button type="submit" class="sign-in btn btn-default">Sign in</button>
          
-         <div class="checkbox">
-            <label>
-              <input id="rememberMe" type="checkbox"> Remember Me
-            </label>
-         </div>
+           <div class="checkbox">
+              <label>
+                <input id="rememberMe" type="checkbox"> Remember Me
+              </label>
+           </div>
             
       </form>
 
@@ -67,26 +64,36 @@
         <input type="text" class="form-control" id="textSearch" placeholder="submarine">
       </div>
 
-      <div class="form-group">
+<!--       <div class="form-group">
+ -->        
         <label>Position</label>
         <p class="help-block">Search for wrecks near a given location</p>
         <input type="number" class="form-control" id="latitudeSearch" placeholder="Latitude">      
         <input type="number" class="form-control" id="longitudeSearch" placeholder="Longitude">        
         <input type="number" class="form-control" id="radiusSearch" placeholder="Radius (in miles)">
+        <br>
+        
+        <button id="getLocation" class="btn btn-default btn-block">Get My Current Location</button></br>
+      
+
+      <div class="form-inline">
+
+        <label>Year Sunk</label>
+        <p class="help-block">Many wrecks do not have year sunk data. This will drastically limit your hits</p>
+        
+        <div class='rangeInput'>
+          <label for="afterRangeSearch">After</label>
+          <input type="number" class="form-control range" id="afterRangeSearch" placeholder="1910">      
+        </div>
+
+        <div class='rangeInput'>
+          <label for="beforeRangeSearch">Before</label>
+          <input type="number" class="form-control range" id="beforeRangeSearch" placeholder="2010">      
+        </div>
+
       </div>
 
-
-      <label>Year Sunk</label>
-      <p class="help-block">Many wrecks do not have year sunk data. This will drastically limit your hits</p>
-      <div class="form-group">
-        <label for="afterRangeSearch">After</label>
-        <input type="number" class="form-control" id="afterRangeSearch" placeholder="1910">      
-      </div>
-
-      <div class="form-group">
-        <label for="beforeRangeSearch">Before</label>
-        <input type="number" class="form-control" id="beforeRangeSearch" placeholder="2010">      
-      </div>
+      <br>
 
       <div class="form-group">
         <label for="idSearch">Unique Record ID</label>
