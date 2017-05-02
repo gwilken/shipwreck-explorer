@@ -186,9 +186,9 @@ h4 {
     margin: 0% 8%;
 }
 
-.rangeInput {
+/*.rangeInput {
     display: inline;
-}
+}*/
 
 .range {
     width: 20%;
@@ -197,12 +197,12 @@ h4 {
 #afterRangeSearch {
     margin-right: 3%;
     display: initial;
-    width: 25%;
+    width: 27%;
 }
 
 #beforeRangeSearch {
     display: initial;
-    width: 25%;
+    width: 27%;
 }
 
 .research {

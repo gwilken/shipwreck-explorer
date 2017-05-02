@@ -24,7 +24,7 @@ $(document).ready(function() {
         $(".sign-in").show();
         $(".user-confirm").hide();
         $(".sign-out").hide();
-        $(".remember").show();
+        $("#rememberMeGroup").show();
         $(".email").attr("placeholder", "Email"); 
         $(".favorites").hide();
     }
@@ -35,7 +35,7 @@ $(document).ready(function() {
         $(".sign-in").hide();
         $(".user-confirm").show();
         $(".sign-out").show();
-        $(".remember").hide();
+        $("#rememberMeGroup").hide();
     }
 
     if (localStorage.getItem("email")) {

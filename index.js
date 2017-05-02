@@ -60,8 +60,11 @@ $(document).ready(function() {
 
   $('#clearMarkers').on('click', function(event) {
       
-      event.preventDefault();      
-      markers.clearLayers();
+      event.preventDefault(); 
+
+      if(markers) {     
+        markers.clearLayers();
+      }
 
       $('#resultsList').empty();
 
@@ -300,6 +303,12 @@ $(document).ready(function() {
     markerMap = {};
 
     markerGroup = [];
+
+    if(markers) {     
+    
+        markers.clearLayers();
+    
+    }
 
 
     for(var i = 0; i < res.length; i++) {
