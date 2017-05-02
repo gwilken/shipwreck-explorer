@@ -180,7 +180,13 @@ $(document).ready(function() {
 
       var history = res[i].properties.history;
 
-      var favButton = '<br><button id="' + res[i]._id + '" class="favorite btn btn-success btn-sm"> <span class="glyphicon glyphicon-star-empty"> </span> Add Favorite </button>';
+      var favButton = '<br><button id="' + res[i]._id + '" class="favorite btn btn-warning btn-sm"> <span class="glyphicon glyphicon-star-empty"> </span> Add Favorite </button>';
+
+      var nytButton = '<button class="times articles btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> NY Times </button>';
+
+      var wikiButton = '<button class="wiki articles btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> Wikipedia</button>';
+
+      var locButton = '<button class="congress articles btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> LOC </button>';
 
       var swapoutMap = '<button id="swapMapButton" class="btn btn-warning btn-sm satButton">Toggle Base Map</button>';
 
@@ -192,13 +198,15 @@ $(document).ready(function() {
 
       var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
 
-      marker.bindPopup('<h3><em>' + name + '</em></h3><h4>' + location + '</h4>' + history + favButton + swapoutMap);
+      marker.bindPopup('<h3><em>' + name + '</em></h3><h4>' + location + '</h4>' + history + favButton + swapoutMap + nytButton + wikiButton + locButton);
     
       markerGroup.push(marker);
 
       markerMap[res[i]._id] = marker;
 
     }
+
+
 
     markers = L.layerGroup(markerGroup);
 
@@ -293,9 +301,9 @@ $(document).ready(function() {
 
       }).done(function(res) {
 
-          buildMarkers(res);
+        buildMarkers(res);
 
-          buildList(res);
+        buildList(res);
 
       })
     
@@ -346,23 +354,9 @@ $(document).ready(function() {
 
       }).done(function(res) {
 
-        console.log(res);
+        buildMarkers(res);
 
-        var marker = L.marker( [ res.geometry.coordinates[1], res.geometry.coordinates[0] ]);
-
-        map.panTo(new L.LatLng( marker.getLatLng().lat, marker.getLatLng().lng), 8);
-
-        marker.openPopup();
-
-        marker.bindPopup('<h3><em>' + res.properties.vesslterms +'</em></h3>' + res.properties.history + '<br><button id="' + res._id + '" class="favorite btn btn-success btn-sm"><span class="glyphicon glyphicon-star-empty"></span> Add to Favorites</button>');
-
-        markerGroup.push(marker);
-
-        markerMap[res._id] = marker;
-
-        markers = L.layerGroup(markerGroup);
-
-        map.addLayer(markers);
+        gotoMarker(res[0]._id);
 
         buildList(res);
 
