@@ -6,12 +6,16 @@
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="style.css">
+
+<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="style.css">
   
   <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
   <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
 
   <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="logic.js"></script>
   <script type="text/javascript" src="index.js"></script>
   <script type ="text/javascript" src="assets/javascript/app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
@@ -23,13 +27,15 @@
 
   <p id="openNav">&#9776;</p>
 
-
   <div id="sideNav">
    
     <p id="closeNav">&times;</p>
 
+    <h1 id='pageTitle'>Tempest</h1>
+
       <form id="loginForm" class="form-inline">
         <label for="emailInput">Email</label><br>
+
         <p class="help-block">Login to remember your favorites.</p>
 
           <div class="form-group">
@@ -43,11 +49,12 @@
 
           <button type="submit" class="sign-out btn btn-danger btn-sm">Sign Out</button>
          
-         <div class="checkbox">
-            <label class="remember">
-              <input id="rememberMe" type="checkbox"> Remember Me
-            </label>
-         </div>
+
+           <div id="rememberMeGroup" class="checkbox">
+              <label>
+                <input id="rememberMe" type="checkbox"> Remember Me
+              </label>
+           </div>
             
       </form>
 
@@ -67,26 +74,36 @@
         <input type="text" class="form-control" id="textSearch" placeholder="submarine">
       </div>
 
-      <div class="form-group">
+<!--       <div class="form-group">
+ -->        
         <label>Position</label>
         <p class="help-block">Search for wrecks near a given location</p>
         <input type="number" class="form-control" id="latitudeSearch" placeholder="Latitude">      
         <input type="number" class="form-control" id="longitudeSearch" placeholder="Longitude">        
         <input type="number" class="form-control" id="radiusSearch" placeholder="Radius (in miles)">
+        <br>
+        
+        <button id="getLocation" class="btn btn-default btn-block">Get My Current Location</button></br>
+      
+
+      <div class="form-inline">
+
+        <label>Year Sunk</label>
+        <p class="help-block">Many wrecks do not have year sunk data. This will drastically limit your hits</p>
+        
+        <div class='rangeInput'>
+          <label for="afterRangeSearch">After</label>
+          <input type="number" class="form-control range" id="afterRangeSearch" placeholder="1910">      
+        </div>
+
+        <div class='rangeInput'>
+          <label for="beforeRangeSearch">Before</label>
+          <input type="number" class="form-control range" id="beforeRangeSearch" placeholder="2010">      
+        </div>
+
       </div>
 
-
-      <label>Year Sunk</label>
-      <p class="help-block">Many wrecks do not have year sunk data. This will drastically limit your hits</p>
-      <div class="form-group">
-        <label for="afterRangeSearch">After</label>
-        <input type="number" class="form-control" id="afterRangeSearch" placeholder="1910">      
-      </div>
-
-      <div class="form-group">
-        <label for="beforeRangeSearch">Before</label>
-        <input type="number" class="form-control" id="beforeRangeSearch" placeholder="2010">      
-      </div>
+      <br>
 
       <div class="form-group">
         <label for="idSearch">Unique Record ID</label>
