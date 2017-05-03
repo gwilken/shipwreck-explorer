@@ -109,6 +109,10 @@ $(document).ready(function() {
 
     event.preventDefault();    
     $(".articles").show();
+    $(".article-plus").hide();
+    $(".article-minus").show();
+    $(".article-content").show();
+    $(".articles").css("width", "100%");
 
      var id = $(this).attr('value');
    
@@ -178,6 +182,10 @@ $(document).ready(function() {
 
     event.preventDefault();    
     $(".articles").show();
+    $(".article-plus").hide();
+    $(".article-minus").show();
+    $(".article-content").show();
+    $(".articles").css("width", "100%");
 
      var id = $(this).attr('value');
 
@@ -240,6 +248,10 @@ $(document).ready(function() {
 
     event.preventDefault();    
     $(".articles").show();
+    $(".article-plus").hide();
+    $(".article-minus").show();
+    $(".article-content").show();
+    $(".articles").css("width", "100%");
 
     var id = $(this).attr('value');
   
