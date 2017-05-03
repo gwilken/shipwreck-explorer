@@ -178,7 +178,7 @@ $(document).ready(function() {
             $(".articles").css("width", "100%");
             artToggle = false;
         }
-    })
+    });
 
 
 

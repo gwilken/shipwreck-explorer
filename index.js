@@ -108,8 +108,6 @@ $(document).ready(function() {
     event.preventDefault();    
 
      var id = $(this).attr('value');
-
-     console.log('times', id);
    
     $.ajax({
 
@@ -144,9 +142,30 @@ $(document).ready(function() {
             endDate: null
           }
           }).done( function(response) {
+            if(response!=null){
+              console.log(response);
+              let articleTitles = [];
+              let articleParagraphs = [];
+              let articleLinks = [];
 
-            console.log(response);
+              let articleNum = response.response.docs.length;
+              for(var i = 0; i < articleNum; i++){
+                articleTitles[i] = response.response.docs[i].headline.main;
+                articleParagraphs[i] = response.response.docs[i].lead_paragraph;
+                articleLinks[i] = response.response.docs[i].web_url;
 
+                var $titleElement = $("<h4>");
+                var $paragraphElement = $("<p>");
+                var $linkElement = $("<a>Full Article</a>");
+
+                $titleElement.html(articleTitles[i]);
+                $paragraphElement.html(articleParagraphs[i]);
+                $linkElement.attr("href", articleLinks[i]).attr("target", "_blank");
+
+                $("#times-content").append($titleElement).append($paragraphElement).append($linkElement).append($("<hr>"));
+              }
+              console.log(articleTitles, articleParagraphs, articleLinks);
+            }
           });
       });
 
@@ -159,6 +178,7 @@ $(document).ready(function() {
      var id = $(this).attr('value');
 
      console.log('wiki', id);
+
 
       $.ajax({
 
@@ -185,9 +205,27 @@ $(document).ready(function() {
               }
 
             }).done( function(response) {
+              let articleTitles = [];
+              let articleParagraphs = [];
+              let articleLinks = [];
 
               console.log(response);
+              let articleNum = response[1].length;
+              for(var i = 0; i < articleNum; i++){
+              articleTitles[i] = response[1][i];
+              articleParagraphs[i] = response[2][i];
+              articleLinks[i] = response[3][i];
 
+              var $titleElement = $("<h4>");
+              var $paragraphElement = $("<p>");
+              var $linkElement = $("<a>Full Article</a>");
+
+              $titleElement.html(articleTitles[i]);
+              $paragraphElement.html(articleParagraphs[i]);
+              $linkElement.attr("href", articleLinks[i]).attr("target", "_blank");
+
+              $("#wiki-content").append($titleElement).append($paragraphElement).append($linkElement).append($("<hr>"));
+              }
             });
         });
 
@@ -221,15 +259,37 @@ $(document).ready(function() {
           q: query.replace(/ /g, "%20"),
           fo: 'json'
         
-        }).done(function(res) {
+        }).done(function(results) {
+          let articleTitles = [];
+          let printLinks = [];
+          let articleDescriptions = [];
+          
+          articleNum = results.results.length;
+          for(var i = 0; i< articleNum; i++){
+            articleTitles[i] = results.results[i].subjects[0];
+            printLinks[i] = results.results[i].image.full.substring(2);
+            articleDescriptions[i] = results.results[i].title;
+            console.log(printLinks[i]);
 
-          console.log(res);
+            var $titleElement = $("<h4>");
+            var $linkElement = $("<a>See Print</a>");
+            var $descriptionElement = $("<p>");
 
+            $titleElement.html(articleTitles[i]);
+            $linkElement.attr("href", printLinks[i]).attr("target", "_blank");
+            $descriptionElement.html(articleDescriptions[i]);
 
+            $("#congress-content").append($titleElement).append($descriptionElement).append($linkElement).append($("<hr>"));
+          }
         });
 
     });
+  });
 
+  $(document).on('click', '#clear-articles', function(){
+    $("#times-content").empty();
+    $("#wiki-content").empty();
+    $("#congress-content").empty();
   });
 
 
@@ -401,13 +461,12 @@ var parseDescriptionDates = function(str) {
         if(dates!==null){
 
             if(dates.length == 2){
-                var sinkDate = dates[0];
-            }
-
-            else{
-            
-                dates = wreckData.match(sunkRegEx);
                 sinkDate = dates[0];
+            }else{
+            
+                dates = str.match(sunkRegEx);
+                console.log(dates);
+                sinkDate = dates[0].split(" ")[1];
             
             }
             
@@ -443,10 +502,6 @@ var parseDescriptionDates = function(str) {
             }
 
             sinkDate = sinkYear + sinkMonth + sinkDay;
-           
-            let sinkNum = parseInt(sinkDate);
-            let leniencyNum = sinkNum + 500000;
-            var leniencyDate = leniencyNum.toString();
         }
 
         return(sinkDate);
