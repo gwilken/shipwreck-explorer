@@ -67,7 +67,8 @@ $(document).ready(function() {
       }
 
       $('#resultsList').empty();
-
+      $(this).closest('form').find("input").val("");
+    
       markerMap = {};
 
   }); 
