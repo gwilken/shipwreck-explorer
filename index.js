@@ -10,6 +10,7 @@ $(document).ready(function() {
   var markerGroup = [];
 
   var nav = $('#sideNav');
+  $(".articles").hide();
 
 
   $('#getLocation').on('click', function(event) {
@@ -107,6 +108,7 @@ $(document).ready(function() {
   $(document).on('click', '.times', function(event) {
 
     event.preventDefault();    
+    $(".articles").show();
 
      var id = $(this).attr('value');
    
@@ -175,7 +177,8 @@ $(document).ready(function() {
   $(document).on('click', '.wiki', function(event) {
 
     event.preventDefault();    
-    
+    $(".articles").show();
+
      var id = $(this).attr('value');
 
      console.log('wiki', id);
@@ -236,6 +239,7 @@ $(document).ready(function() {
   $(document).on('click', '.congress', function(event) {
 
     event.preventDefault();    
+    $(".articles").show();
 
     var id = $(this).attr('value');
   
