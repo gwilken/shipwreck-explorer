@@ -1,8 +1,9 @@
-# Wrecked
+# Tempest
+
+Search for shipwrecks in US waters. Built with Node, MongoDB, and Javascript.
 
 
 API endpoints and definitions:
-
 
 /wreck
 

@@ -1,0 +1,34 @@
+{
+  "name": "tempest-shipwreck-explorer",
+  "version": "0.0.1",
+  "description": "Search for shipwrecks in US waters",
+  "main": "wreckserver.js",
+  "dependencies": {
+    "cors": "^2.8.3",
+    "express": "^4.15.2",
+    "mongodb": "^2.2.26"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gwilken/tempest-shipwreck-explorer.git"
+  },
+  "keywords": [
+    "oceans",
+    "ship",
+    "wrecks",
+    "sea",
+    "NOAA",
+    "sailing",
+    "sailboats"
+  ],
+  "author": "Greg Wilken, Brandon Stiles, Max Weibert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gwilken/tempest-shipwreck-explorer/issues"
+  },
+  "homepage": "https://github.com/gwilken/tempest-shipwreck-explorer#readme"
+}
