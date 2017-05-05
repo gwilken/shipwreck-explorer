@@ -31,19 +31,20 @@ app.set('port', WEBPORT);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+
 app.get('/id', function (req, res) {
+
+  console.log('hit id endpoint');
 
   var qId = new ObjectID(req.query.id);
 
   console.log('qid:', qId);
 
-  collection.findOne( { _id : qId }, function(err, doc) {
+  resultsArr = collection.find( { _id : qId } ).toArray();
 
-    console.log('error', err);
+  resultsArr.then(function(arr) {
 
-    console.log(doc)
-
-    res.send(doc);
+    res.send(arr);
 
   })
 
