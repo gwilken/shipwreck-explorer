@@ -2,7 +2,7 @@
   "name": "tempest-shipwreck-explorer",
   "version": "0.0.1",
   "description": "Search for shipwrecks in US waters",
-  "main": "wreckserver.js",
+  "main": "server.js",
   "dependencies": {
     "cors": "^2.8.3",
     "express": "^4.15.2",
