@@ -1,6 +1,8 @@
 $(document).ready(function() {
 
   var map = L.map('map').setView([34, -85], 5);
+  map.doubleClickZoom.disable();
+  
   var currentBaseMap = 'Oceans';
   var baseLayer = L.esri.basemapLayer(currentBaseMap).addTo(map);
 
