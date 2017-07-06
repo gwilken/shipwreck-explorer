@@ -15,7 +15,7 @@ $(document).ready(function() {
 
   $('#getLocation').on('click', function(event) {
 
-    event.preventDefault();    
+    event.preventDefault();
 
     $('#getLocation').html('Getting location...');
 
@@ -60,19 +60,19 @@ $(document).ready(function() {
 
 
   $('#clearMarkers').on('click', function(event) {
-      
-      event.preventDefault(); 
 
-      if(markers) {     
+      event.preventDefault();
+
+      if(markers) {
         markers.clearLayers();
       }
 
       $('#resultsList').empty();
       $(this).closest('form').find("input").val("");
-    
+
       markerMap = {};
 
-  }); 
+  });
 
 
   $(document).on('click', '.listItem', function() {
@@ -89,15 +89,15 @@ $(document).ready(function() {
 
 
   $(document).on('click', '#swapMapButton', function(event) {
-    
-    event.preventDefault();     
+
+    event.preventDefault();
 
     if(currentBaseMap === 'Oceans') {
       currentBaseMap = 'Imagery';
       setBasemap(currentBaseMap);
 
     } else {
-      
+
       currentBaseMap = 'Oceans';
       setBasemap(currentBaseMap);
 
@@ -107,7 +107,7 @@ $(document).ready(function() {
 
   $(document).on('click', '.times', function(event) {
 
-    event.preventDefault();    
+    event.preventDefault();
     $(".articles").show();
     $(".article-plus").hide();
     $(".article-minus").show();
@@ -115,10 +115,10 @@ $(document).ready(function() {
     $(".articles").css("width", "100%");
 
      var id = $(this).attr('value');
-   
+
     $.ajax({
 
-      url: 'http://www.rednightsky.com/id',
+      url: 'http://localhost/id',
       method: 'GET',
       data: {
         id: id
@@ -137,7 +137,7 @@ $(document).ready(function() {
 
         var timesURLBase = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" +
           timesKey + "&q=";
-      
+
         let timesURL = timesURLBase;
         timesURL += searchTerm;
 
@@ -180,7 +180,7 @@ $(document).ready(function() {
 
   $(document).on('click', '.wiki', function(event) {
 
-    event.preventDefault();    
+    event.preventDefault();
     $(".articles").show();
     $(".article-plus").hide();
     $(".article-minus").show();
@@ -194,7 +194,7 @@ $(document).ready(function() {
 
       $.ajax({
 
-        url: 'http://www.rednightsky.com/id',
+        url: 'http://localhost/id',
         method: 'GET',
         data: {
           id: id
@@ -207,9 +207,9 @@ $(document).ready(function() {
           console.log(searchTerm);
 
           let wikiURL = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + searchTerm + "&format=json&callback=?";
-        
+
           $.ajax( {
-              url: wikiURL,       
+              url: wikiURL,
               type: 'GET',
               dataType: 'json',
               data: function(data, status, jqXHR) {
@@ -246,7 +246,7 @@ $(document).ready(function() {
 
   $(document).on('click', '.congress', function(event) {
 
-    event.preventDefault();    
+    event.preventDefault();
     $(".articles").show();
     $(".article-plus").hide();
     $(".article-minus").show();
@@ -254,12 +254,12 @@ $(document).ready(function() {
     $(".articles").css("width", "100%");
 
     var id = $(this).attr('value');
-  
+
     console.log('congress', id);
 
    $.ajax({
 
-        url: 'http://www.rednightsky.com/id',
+        url: 'http://localhost/id',
         method: 'GET',
         data: {
           id: id
@@ -271,16 +271,16 @@ $(document).ready(function() {
         let query = res[0].properties.vesslterms;
 
         $.getJSON(congressURL, {
-        
+
           type: "search",
           q: query.replace(/ /g, "%20"),
           fo: 'json'
-        
+
         }).done(function(results) {
           let articleTitles = [];
           let printLinks = [];
           let articleDescriptions = [];
-          
+
           articleNum = results.results.length;
           for(var i = 0; i< articleNum; i++){
             articleTitles[i] = results.results[i].subjects[0];
@@ -314,21 +314,21 @@ $(document).ready(function() {
   map.on('dblclick', function(e) {
 
     var popupSearch = '<h5> Latitude: ' + e.latlng.lat + '</br> Longitude: ' + e.latlng.lng + '</h5><form id="searchPopup" class="form-inline"> <p class="help-block">Search for wrecks within</p> <div class="form-group"><input type="number" class="form-control" id="milesInput" placeholder="50 miles"><button id="popupSearchButton" type="submit" class="btn btn-primary">Go</button> </div> </form>'
-    
+
     var popup = L.popup()
       .setLatLng(e.latlng)
       .setContent(popupSearch)
       .openOn(map);
-  
+
 
     $('#popupSearchButton').on('click', function(event) {
-      
+
       map.closePopup();
 
-      event.preventDefault();     
+      event.preventDefault();
 
       var mileRadius = $('#milesInput').val().trim();
-      
+
       if(markers) {
         markers.clearLayers();
       }
@@ -339,13 +339,13 @@ $(document).ready(function() {
 
       $.ajax({
 
-        url: 'http://www.rednightsky.com/proximity',
+        url: 'http://localhost/proximity',
         method: 'GET',
           data: {
             lat: e.latlng.lat,
             lon: e.latlng.lng,
             radius: mileRadius * 1609
-          } 
+          }
 
       }).done(function(res) {
 
@@ -355,13 +355,13 @@ $(document).ready(function() {
 
         });
 
-      }); 
+      });
 
   });
 
 
   function setBasemap(basemap) {
-      
+
       console.log(baseLayer);
 
       if (baseLayer) {
@@ -381,17 +381,17 @@ $(document).ready(function() {
 
     markerGroup = [];
 
-    if(markers) {     
-    
+    if(markers) {
+
         markers.clearLayers();
-    
+
     }
 
 
     for(var i = 0; i < res.length; i++) {
-          
+
       var name = res[i].properties.vesslterms;
-      
+
       var location = res[i].geometry.coordinates[1] + ',' + res[i].geometry.coordinates[0];
 
       var history = res[i].properties.history;
@@ -415,7 +415,7 @@ $(document).ready(function() {
       var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
 
       marker.bindPopup('<h3><em>' + name + '</em></h3><h4>' + location + '</h4>' + history + favButton + swapoutMap + nytButton + wikiButton + locButton);
-    
+
       markerGroup.push(marker);
 
       markerMap[res[i]._id] = marker;
@@ -434,15 +434,15 @@ $(document).ready(function() {
   var buildList = function(res) {
 
     for(var i = 0; i < res.length; i++) {
-      
+
       var item = $('<div class="list-group-item listItem">');
-      
+
       item.attr('value', res[i]._id);
-      
+
       var name = $('<h3>').css('font-style', 'italic').html(res[i].properties.vesslterms);
-      
-      var location = $('<h4>').html(res[i].geometry.coordinates[1] + ', ' + res[i].geometry.coordinates[0]); 
-      
+
+      var location = $('<h4>').html(res[i].geometry.coordinates[1] + ', ' + res[i].geometry.coordinates[0]);
+
       var desc = $('<div>').css('font-style', 'initial').html(res[i].properties.history);
 
       item.append(name);
@@ -480,42 +480,42 @@ var parseDescriptionDates = function(str) {
             if(dates.length == 2){
                 sinkDate = dates[0];
             }else{
-            
+
                 dates = str.match(sunkRegEx);
                 console.log(dates);
                 sinkDate = dates[0].split(" ")[1];
-            
+
             }
-            
+
             let dateExpansion = sinkDate.split("/");
             let sinkYear = dateExpansion[2];
-            
+
             if (sinkYear.length==2){
 
                 if(parseInt(sinkYear) < 17){
                     sinkYear = "20" + sinkYear;
-              
+
                 }else{
-              
+
                     sinkYear = "19" + sinkYear;
-              
+
                 }
             }
-            
+
             let sinkMonth = dateExpansion[0];
-            
+
             if(sinkMonth.length==1){
-           
+
                 sinkMonth = "0" + sinkMonth;
-           
+
             }
-           
+
             let sinkDay = dateExpansion[1];
-           
+
             if(sinkDay.length==1){
-           
+
                 sinkDay = "0" + sinkDay;
-           
+
             }
 
             sinkDate = sinkYear + sinkMonth + sinkDay;
@@ -542,7 +542,7 @@ var parseDescriptionDates = function(str) {
     event.preventDefault();
 
     if(markers) markers.clearLayers();
-  
+
     $('#resultsList').empty();
 
     markerMap = {};
@@ -568,7 +568,7 @@ var parseDescriptionDates = function(str) {
 
       $.ajax({
 
-        url: 'http://www.rednightsky.com/id',
+        url: 'http://localhost/id',
         method: 'GET',
         data: {
           id: id
@@ -581,20 +581,20 @@ var parseDescriptionDates = function(str) {
         buildList(res);
 
       })
-    
-    } else 
+
+    } else
 
       {
 
         $.ajax({
-          url: 'http://www.rednightsky.com/wreck',
+          url: 'http://localhost/wreck',
           method: 'GET',
           data: {
 
             location: {
                 lat: lat,
                 lon: lon,
-                radius: radius * 1609  
+                radius: radius * 1609
               },
 
               name: name,
@@ -621,7 +621,7 @@ var parseDescriptionDates = function(str) {
 
         $.ajax({
 
-          url: 'http://www.rednightsky.com/id',
+          url: 'http://localhost/id',
           method: 'GET',
           data: {
             id: id
@@ -636,8 +636,7 @@ var parseDescriptionDates = function(str) {
           buildList(res);
 
         })
-        
+
       })
 
 })
-

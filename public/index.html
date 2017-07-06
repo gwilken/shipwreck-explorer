@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Orbitron" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
     <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
@@ -30,13 +30,13 @@
   <p id="openNav">&#9776;</p>
 
   <div id="sideNav">
-   
+
     <p id="closeNav">&times;</p>
 
     <h1 id='pageTitle'>Tempest</h1>
 
       <form id="loginForm" class="form-inline">
-        
+
         <label for="emailInput">Email</label><br>
 
         <p class="help-block">Login to remember your favorites.</p>
@@ -55,11 +55,11 @@
           <button type="submit" class="sign-out btn btn-danger btn-sm">Sign Out</button>
 
            <div id="rememberMeGroup" class="checkbox">
-       
+
                 <input id="rememberMe" type="checkbox"> Remember Me
-             
+
            </div>
-            
+
       </form>
 
     <br>
@@ -78,27 +78,27 @@
         <input type="text" class="form-control" id="textSearch" placeholder="submarine">
       </div>
 
-        
+
       <label>Position</label>
       <p class="help-block">Search for wrecks near a given location</p>
-      <input type="number" class="form-control" id="latitudeSearch" placeholder="Latitude">      
-      <input type="number" class="form-control" id="longitudeSearch" placeholder="Longitude">        
+      <input type="number" class="form-control" id="latitudeSearch" placeholder="Latitude">
+      <input type="number" class="form-control" id="longitudeSearch" placeholder="Longitude">
       <input type="number" class="form-control" id="radiusSearch" placeholder="Radius (in miles)">
       <br>
-      
+
       <button id="getLocation" class="btn btn-default btn-block">Get My Current Location</button></br>
-      
+
       <div class="form-inline">
 
         <label>Year Sunk</label>
         <p class="help-block">Many wrecks do not have year sunk data. This will drastically limit your hits</p>
-        
+
         <div class='rangeInput'>
           <label for="afterRangeSearch">After</label>
-          <input type="number" class="form-control range" id="afterRangeSearch" placeholder="1910">      
-     
+          <input type="number" class="form-control range" id="afterRangeSearch" placeholder="1910">
+
           <label for="beforeRangeSearch">Before</label>
-          <input type="number" class="form-control range" id="beforeRangeSearch" placeholder="2010">      
+          <input type="number" class="form-control range" id="beforeRangeSearch" placeholder="2010">
         </div>
 
       </div>
@@ -128,10 +128,10 @@
         </label>
       </div>
 
-      <br>     
+      <br>
 
       <button id="searchSubmit" type="submit" class="btn btn-primary btn-block">Search</button>
-    
+
       <button id="clearMarkers" class="btn btn-default btn-block">Clear Current Hits</button>
 
       </form>
@@ -142,13 +142,13 @@
       <div id='results'>
 
         <div class="panel panel-default">
-          
+
           <div class="panel-heading">
             <h3 class="panel-title">Search Results</h3>
           </div>
-          
+
           <div class="panel-body">
-               
+
                <div id="resultsList" class="list-group"></div>
 
           </div>
