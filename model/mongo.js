@@ -11,6 +11,7 @@ module.exports = {
       console.log("Connected successfully to mongodb");
       module.exports.db = db;
       module.exports.collection = db.collection('wrecks');
+      module.exports.users = db.collection('users');
       callback();
     });
   }

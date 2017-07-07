@@ -2,7 +2,7 @@ $(document).ready(function() {
 
   var map = L.map('map').setView([34, -85], 5);
   map.doubleClickZoom.disable();
-  
+
   var currentBaseMap = 'Oceans';
   var baseLayer = L.esri.basemapLayer(currentBaseMap).addTo(map);
 
@@ -13,52 +13,6 @@ $(document).ready(function() {
 
   var nav = $('#sideNav');
   $(".articles").hide();
-
-
-  $('#getLocation').on('click', function(event) {
-
-    event.preventDefault();
-
-    $('#getLocation').html('Getting location...');
-
-    var options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-    };
-
-    function success(pos) {
-
-      $('#getLocation').html('Get My Current Location');
-
-      var crd = pos.coords;
-
-      $('#latitudeSearch').val(crd.latitude);
-      $('#longitudeSearch').val(crd.longitude);
-
-      var redIcon = new L.Icon({
-        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      });
-
-      var marker = L.marker([crd.latitude, crd.longitude], {icon: redIcon}).addTo(map);
-
-      marker.bindPopup('<h4>My Location</h4><p><span>Latitude: ' + crd.latitude + '</span><br><span>Longitude: ' + crd.longitude + '</span></p>');
-
-    };
-
-    function error(err) {
-      $('#getLocation').html("Can't get current location.");
-      console.warn('error on get current position', err.code, err.message);
-    };
-
-    navigator.geolocation.getCurrentPosition(success, error, options);
-
-  })
 
 
   $('#clearMarkers').on('click', function(event) {

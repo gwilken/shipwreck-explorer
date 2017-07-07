@@ -4,8 +4,10 @@
   "description": "Search for shipwrecks in US waters",
   "main": "server.js",
   "dependencies": {
+    "body-parser": "^1.17.2",
     "cors": "^2.8.3",
     "express": "^4.15.2",
+    "express-handlebars": "^3.0.0",
     "mongodb": "^2.2.26"
   },
   "devDependencies": {},

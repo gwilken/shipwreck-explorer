@@ -25,7 +25,7 @@ $(document).ready(function() {
         $(".user-confirm").hide();
         $(".sign-out").hide();
         $("#rememberMeGroup").show();
-        $(".email").attr("placeholder", "Email"); 
+        $(".email").attr("placeholder", "Email");
         $(".favorites").hide();
     }
 
@@ -63,10 +63,11 @@ $(document).ready(function() {
             }
         })
 
-        if ($("#rememberMe").prop("checked")) {
+
             localStorage.clear();
             localStorage.setItem("email", email);
-        }
+
+
         loggedIn();
     })
 
@@ -179,7 +180,4 @@ $(document).ready(function() {
             artToggle = false;
         }
     });
-
-
-
 })

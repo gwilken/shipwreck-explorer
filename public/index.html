@@ -2,7 +2,7 @@
 
   <head>
     <meta charset=utf-8 />
-    <title>Tempest</title>
+    <title>Shipwreck Explorer</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
@@ -12,13 +12,15 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Orbitron" rel="stylesheet">
 
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/material.min.css">
 
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
     <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
 
     <script type="text/javascript" src="assets/javascript/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="assets/javascript/material.min.js"></script>
     <script type="text/javascript" src="assets/javascript/index.js"></script>
-    <script type ="text/javascript" src="assets/javascript/app.js"></script>
+    <script type ="text/javascript" src="assets/javascript/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 
   </head>
@@ -33,15 +35,9 @@
 
     <p id="closeNav">&times;</p>
 
-    <h1 id='pageTitle'>Tempest</h1>
-
       <form id="loginForm" class="form-inline">
 
-        <label for="emailInput">Email</label><br>
-
-        <p class="help-block">Login to remember your favorites.</p>
-
-          <div class="form-group">
+        <div class="form-group">
 
             <label class="sr-only" for="emailInput">Email address</label>
             <input type="email" required class="email form-control" id="emailInput" placeholder="Email">
@@ -54,44 +50,56 @@
 
           <button type="submit" class="sign-out btn btn-danger btn-sm">Sign Out</button>
 
-           <div id="rememberMeGroup" class="checkbox">
-
-                <input id="rememberMe" type="checkbox"> Remember Me
-
-           </div>
+            <p class="help-block">Login to save favorites.</p>
 
       </form>
 
     <br>
 
+
+    <form id="searchForm">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="nameSearch">
+        <label class="mdl-textfield__label" for="nameSearch">Search by vessel name...</label>
+      </div>
+  
+
+    <!-- Numeric Textfield with Floating Label -->
+    <!-- <form action="#">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample4">
+        <label class="mdl-textfield__label" for="sample4">Number...</label>
+        <span class="mdl-textfield__error">Input is not a number!</span>
+      </div>
+    </form> -->
+
+
+
+<!--
     <form id="searchForm">
 
       <div class="form-group">
-        <label for="nameSearch">Vessel Name</label>
-        <p class="help-block">Know the name of the ship? Search for it directly</p>
-        <input type="text" class="form-control" id="nameSearch" placeholder="Star of Hollywood">
-      </div>
+        <p class="help-block">Search directly by vessel name</p>
+        <input type="text" class="form-control" id="nameSearch" placeholder="Vessel Name Search">
+
+      </div> -->
 
       <div class="form-group">
-        <label for="textSearch">Text</label>
-        <p class="help-block">Search the historical description for interesting finds</p>
-        <input type="text" class="form-control" id="textSearch" placeholder="submarine">
+        <p class="help-block">Search historical description for keyword(s)</p>
+        <input type="text" class="form-control" id="textSearch" placeholder="Text Search">
+
       </div>
 
-
-      <label>Position</label>
-      <p class="help-block">Search for wrecks near a given location</p>
+      <p class="help-block">Search near a given location</p>
       <input type="number" class="form-control" id="latitudeSearch" placeholder="Latitude">
       <input type="number" class="form-control" id="longitudeSearch" placeholder="Longitude">
       <input type="number" class="form-control" id="radiusSearch" placeholder="Radius (in miles)">
       <br>
 
-      <button id="getLocation" class="btn btn-default btn-block">Get My Current Location</button></br>
-
       <div class="form-inline">
 
         <label>Year Sunk</label>
-        <p class="help-block">Many wrecks do not have year sunk data. This will drastically limit your hits</p>
+        <p class="help-block">Many wrecks do not have year sunk data. This will drastically limit results</p>
 
         <div class='rangeInput'>
           <label for="afterRangeSearch">After</label>
@@ -107,7 +115,7 @@
 
       <div class="form-group">
         <label for="idSearch">Unique Record ID</label>
-        <p class="help-block">Search the database by specific ID. This will override any other search parameters</p>
+        <p class="help-block">Search the database by specific ID</p>
 
         <input type="text" class="form-control" id="idSearch" placeholder="59038085f857488a9a719176">
       </div>
