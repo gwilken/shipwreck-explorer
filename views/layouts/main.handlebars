@@ -1,0 +1,131 @@
+<html>
+
+  <head>
+    <meta charset=utf-8 />
+    <title>Shipwreck Explorer</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/material.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
+    <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
+
+    <script type="text/javascript" src="assets/javascript/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="assets/javascript/material.min.js"></script>
+    <script type="text/javascript" src="assets/javascript/index-new.js"></script>
+  </head>
+
+<body>
+
+  <div id="map"></div>
+
+  <p id="open-nav">&#9776;</p>
+
+  <div id="side-nav">
+
+    <p id="close-nav">&times;</p>
+
+    <br>
+
+    <form id="search-form">
+
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="textSearch">
+        <label class="mdl-textfield__label" for="textSearch">Search by keywords...</label>
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="nameSearch">
+        <label class="mdl-textfield__label" for="nameSearch">Search by ship's name...</label>
+      </div>
+
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="idSearch">
+        <label class="mdl-textfield__label" for="idSearch">Search by database ID...</label>
+      </div>
+
+      <div class='range-input'>
+
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label yearRange">
+          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="afterRangeSearch">
+          <label class="mdl-textfield__label" for="afterRangeSearch">Sunk After...</label>
+          <span class="mdl-textfield__error">Input is not a number!</span>
+        </div>
+
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label yearRange">
+          <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="beforeRangeSearch">
+          <label class="mdl-textfield__label" for="beforeRangeSearch">Sunk Before...</label>
+          <span class="mdl-textfield__error">Input is not a number!</span>
+        </div>
+
+      </div>
+
+      <div class="checkbox-container">
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="hasName">
+          <input type="checkbox" id="hasName" class="mdl-checkbox__input">
+          <span class="mdl-checkbox__label">Has a name</span>
+        </label>
+
+        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="hasHistory">
+          <input type="checkbox" id="hasHistory" class="mdl-checkbox__input">
+          <span class="mdl-checkbox__label">Has a description</span>
+        </label>
+      </div>
+
+      <br>
+
+      <button id="search-submit" type="submit" class="btn btn-primary btn-block">Search</button>
+      <button id="clear-markers" class="btn btn-default btn-block">Clear Current Hits</button>
+
+    </form>
+
+    <br><br>
+
+    <div id='results'>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Search Results</h3>
+        </div>
+
+        <div class="panel-body">
+          <div id="results-list" class="list-group"></div>
+        </div>
+
+      </div>
+    </div>
+
+     </div>
+
+      <div class="left-bar">
+
+        <div class="favorites">
+          <div class="fav-heading">
+            <span>&#9733;   Favorites</span>
+            <span class="fav-minus glyphicon glyphicon-minus-sign"></span>
+            <span class="fav-plus glyphicon glyphicon-plus-sign"></span>
+          </div>
+          <div class="fav-content">
+          </div>
+        </div>
+
+        <div class="articles">
+          <div class="article-heading">
+            <span>&#8618; Articles</span>
+            <span class="article-minus glyphicon glyphicon-minus-sign"></span>
+            <span class="article-plus glyphicon glyphicon-plus-sign"></span>
+          </div>
+
+          <div class="article-content">
+            <div id="times-content"></div>
+            <div id="wiki-content"></div>
+            <div id="congress-content"></div>
+            <button id="clear-articles" class="btn btn-danger">Clear</button>
+          </div>
+        </div>
+     </div>
+
+</body>
+</html>

@@ -6,189 +6,135 @@
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
 
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Orbitron" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="assets/css/material.min.css">
+    <script type="text/javascript" src="assets/javascript/material.min.js"></script>
 
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/material.min.css">
 
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet-src.js"></script>
     <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
 
     <script type="text/javascript" src="assets/javascript/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="assets/javascript/material.min.js"></script>
-    <script type="text/javascript" src="assets/javascript/index.js"></script>
-    <script type ="text/javascript" src="assets/javascript/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
 
+    <script type="text/javascript" src="assets/javascript/index.js"></script>
   </head>
 
-<body>
+  <body>
 
-  <div id="map"></div>
+    <div id="map"></div>
 
-  <p id="openNav">&#9776;</p>
+    <p id="open-nav">&#9776;</p>
 
-  <div id="sideNav">
+    <div id="side-nav">
 
-    <p id="closeNav">&times;</p>
+      <p id="close-nav">&times;</p>
 
-      <form id="loginForm" class="form-inline">
+      <br>
 
-        <div class="form-group">
+      <form id="search-form">
 
-            <label class="sr-only" for="emailInput">Email address</label>
-            <input type="email" required class="email form-control" id="emailInput" placeholder="Email">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="text" id="textSearch">
+          <label class="mdl-textfield__label" for="textSearch">Search by keywords...</label>
+        </div>
 
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="text" id="nameSearch">
+          <label class="mdl-textfield__label" for="nameSearch">Search by ship's name...</label>
+        </div>
+
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="text" id="idSearch">
+          <label class="mdl-textfield__label" for="idSearch">Search by database ID...</label>
+        </div>
+
+        <div class='range-input'>
+
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label yearRange">
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="afterRangeSearch">
+            <label class="mdl-textfield__label" for="afterRangeSearch">Sunk After...</label>
+            <span class="mdl-textfield__error">Input is not a number!</span>
           </div>
 
-          <span class="user-confirm">You are signed in</span>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label yearRange">
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="beforeRangeSearch">
+            <label class="mdl-textfield__label" for="beforeRangeSearch">Sunk Before...</label>
+            <span class="mdl-textfield__error">Input is not a number!</span>
+          </div>
 
-          <button type="submit" class="sign-in btn btn-default">Sign in</button>
+        </div>
 
-          <button type="submit" class="sign-out btn btn-danger btn-sm">Sign Out</button>
+        <div class="checkbox-container">
+          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="hasName">
+            <input type="checkbox" id="hasName" class="mdl-checkbox__input">
+            <span class="mdl-checkbox__label">Has a name</span>
+          </label>
 
-            <p class="help-block">Login to save favorites.</p>
+          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="hasHistory">
+            <input type="checkbox" id="hasHistory" class="mdl-checkbox__input">
+            <span class="mdl-checkbox__label">Has a description</span>
+          </label>
+        </div>
+
+        <br>
+
+        <div class="button-container">
+          <button id="search-submit" type="submit" class="search-buttons mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Search</button>
+          <button id="clear-markers" class="search-buttons mdl-button mdl-js-button mdl-button--raised">Clear</button>
+          <button id="show-favs" class="search-buttons mdl-button mdl-js-button mdl-button--raised">Show Favs</button>
+        </div>
+
+        <br>
+
+        <hr>
 
       </form>
 
-    <br>
-
-
-    <form id="searchForm">
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" id="nameSearch">
-        <label class="mdl-textfield__label" for="nameSearch">Search by vessel name...</label>
-      </div>
-  
-
-    <!-- Numeric Textfield with Floating Label -->
-    <!-- <form action="#">
-      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample4">
-        <label class="mdl-textfield__label" for="sample4">Number...</label>
-        <span class="mdl-textfield__error">Input is not a number!</span>
-      </div>
-    </form> -->
-
-
-
-<!--
-    <form id="searchForm">
-
-      <div class="form-group">
-        <p class="help-block">Search directly by vessel name</p>
-        <input type="text" class="form-control" id="nameSearch" placeholder="Vessel Name Search">
-
-      </div> -->
-
-      <div class="form-group">
-        <p class="help-block">Search historical description for keyword(s)</p>
-        <input type="text" class="form-control" id="textSearch" placeholder="Text Search">
-
-      </div>
-
-      <p class="help-block">Search near a given location</p>
-      <input type="number" class="form-control" id="latitudeSearch" placeholder="Latitude">
-      <input type="number" class="form-control" id="longitudeSearch" placeholder="Longitude">
-      <input type="number" class="form-control" id="radiusSearch" placeholder="Radius (in miles)">
       <br>
 
-      <div class="form-inline">
+      <div id='results-container'>
+        <p id='search-hits'></p>
+        <br>
 
-        <label>Year Sunk</label>
-        <p class="help-block">Many wrecks do not have year sunk data. This will drastically limit results</p>
+        <ul id="results-list"></ul>
 
-        <div class='rangeInput'>
-          <label for="afterRangeSearch">After</label>
-          <input type="number" class="form-control range" id="afterRangeSearch" placeholder="1910">
+      </div>
 
-          <label for="beforeRangeSearch">Before</label>
-          <input type="number" class="form-control range" id="beforeRangeSearch" placeholder="2010">
+    </div>
+
+    <div class="left-bar">
+
+      <div class="favorites">
+        <div class="fav-heading">
+          <span>&#9733;   Favorites</span>
+          <span class="fav-minus glyphicon glyphicon-minus-sign"></span>
+          <span class="fav-plus glyphicon glyphicon-plus-sign"></span>
+        </div>
+        <div class="fav-content">
+        </div>
+      </div>
+
+      <div class="articles">
+        <div class="article-heading">
+          <span>&#8618; Articles</span>
+          <span class="article-minus glyphicon glyphicon-minus-sign"></span>
+          <span class="article-plus glyphicon glyphicon-plus-sign"></span>
         </div>
 
-      </div>
-
-      <br>
-
-      <div class="form-group">
-        <label for="idSearch">Unique Record ID</label>
-        <p class="help-block">Search the database by specific ID</p>
-
-        <input type="text" class="form-control" id="idSearch" placeholder="59038085f857488a9a719176">
-      </div>
-
-      <div class="form-group">
-        <p class="help-block">Only show wrecks that</p>
-      </div>
-
-      <div class="checkbox">
-        <label>
-          <input id="hasName" type="checkbox"> Have a name (there are many unknown wrecks)
-        </label>
-      </div>
-
-      <div class="checkbox">
-        <label>
-          <input id="hasHistory" type="checkbox"> Have historical information
-        </label>
-      </div>
-
-      <br>
-
-      <button id="searchSubmit" type="submit" class="btn btn-primary btn-block">Search</button>
-
-      <button id="clearMarkers" class="btn btn-default btn-block">Clear Current Hits</button>
-
-      </form>
-
-      <br><br>
-
-
-      <div id='results'>
-
-        <div class="panel panel-default">
-
-          <div class="panel-heading">
-            <h3 class="panel-title">Search Results</h3>
-          </div>
-
-          <div class="panel-body">
-
-               <div id="resultsList" class="list-group"></div>
-
-          </div>
+        <div class="article-content">
+          <div id="times-content"></div>
+          <div id="wiki-content"></div>
+          <div id="congress-content"></div>
+          <button id="clear-articles" class="btn btn-danger">Clear</button>
         </div>
-
       </div>
+   </div>
 
-     </div>
-      <div class="left-bar">
-        <div class="favorites">
-          <div class="fav-heading">
-            <span>&#9733;   Favorites</span>
-            <span class="fav-minus glyphicon glyphicon-minus-sign"></span>
-            <span class="fav-plus glyphicon glyphicon-plus-sign"></span>
-          </div>
-          <div class="fav-content">
-          </div>
-        </div>
-        <div class="articles">
-          <div class="article-heading">
-            <span>&#8618; Articles</span>
-            <span class="article-minus glyphicon glyphicon-minus-sign"></span>
-            <span class="article-plus glyphicon glyphicon-plus-sign"></span>
-          </div>
-          <div class="article-content">
-            <div id="times-content"></div>
-            <div id="wiki-content"></div>
-            <div id="congress-content"></div>
-            <button id="clear-articles" class="btn btn-danger">Clear</button>
-          </div>
-        </div>
-     </div>
-
-</body>
+  </body>
 </html>

@@ -7,58 +7,106 @@ $(document).ready(function() {
   var baseLayer = L.esri.basemapLayer(currentBaseMap).addTo(map);
 
   var markers;
-
   var markerMap = {};
   var markerGroup = [];
 
-  var nav = $('#sideNav');
+  var favorites = [];
+
+  if (localStorage.getItem("favorites")) {
+      favorites = JSON.parse(localStorage.getItem("favorites"));
+  }
+
+
+  var nav = $('#side-nav');
   $(".articles").hide();
 
+  $('#open-nav').on('click', function() {
+    nav.css('width', '27%');
+  });
 
-  $('#clearMarkers').on('click', function(event) {
+  $('#close-nav').on('click', function() {
+    nav.css('width', "0%");
+  });
 
+  $('#clear-markers').on('click', function(event) {
       event.preventDefault();
 
       if(markers) {
         markers.clearLayers();
       }
 
-      $('#resultsList').empty();
+      $('#results-list').empty();
       $(this).closest('form').find("input").val("");
+
+      $('#search-hits').html('');
+
+      markerMap = {};
+  });
+
+  $('#show-favs').on('click', function(event) {
+    event.preventDefault();
+
+    $.ajax({
+      url: 'http://localhost/favs',
+      method: 'GET',
+      data: {
+        ids: favorites
+      }
+    }).done(function(res) {
+      if(markers) markers.clearLayers();
+
+      $('#results-list').empty();
 
       markerMap = {};
 
-  });
+      buildMarkers(res);
+      buildList(res);
+    })
+  })
 
 
-  $(document).on('click', '.listItem', function() {
-
+  $(document).on('click', '.list-item', function() {
      var id = $(this).attr('value');
-
      var marker = markerMap[id];
-
      marker.openPopup();
-
      map.panTo(new L.LatLng( marker.getLatLng().lat, marker.getLatLng().lng), 8);
-
   });
 
+$(document).on('click', '.favorite-button', function(event) {
+  event.preventDefault();
+
+  id = $(this).attr("id");
+
+  if($(this).hasClass('selected')) {
+    $(this).removeClass('selected');
+    $(this).html('star_border');
+
+    if(favorites.indexOf(id) !== -1) {
+      favorites.splice(favorites.indexOf(id), 1);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+    }
+
+  } else {
+    $(this).addClass('selected');
+    $(this).html('star');
+    favorites.push(id);
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    console.log(favorites);
+  }
+
+
+})
 
   $(document).on('click', '#swapMapButton', function(event) {
-
     event.preventDefault();
 
     if(currentBaseMap === 'Oceans') {
       currentBaseMap = 'Imagery';
       setBasemap(currentBaseMap);
-
     } else {
-
-      currentBaseMap = 'Oceans';
-      setBasemap(currentBaseMap);
-
-    }
-
+        currentBaseMap = 'Oceans';
+        setBasemap(currentBaseMap);
+      }
   });
 
   $(document).on('click', '.times', function(event) {
@@ -266,10 +314,21 @@ $(document).ready(function() {
   });
 
 
-
   map.on('dblclick', function(e) {
 
-    var popupSearch = '<h5> Latitude: ' + e.latlng.lat + '</br> Longitude: ' + e.latlng.lng + '</h5><form id="searchPopup" class="form-inline"> <p class="help-block">Search for wrecks within</p> <div class="form-group"><input type="number" class="form-control" id="milesInput" placeholder="50 miles"><button id="popupSearchButton" type="submit" class="btn btn-primary">Go</button> </div> </form>'
+    var popupSearch =
+
+      `<h5> Positon: </h5>
+      <p> ${e.latlng.lat} , ${e.latlng.lng} </p>
+
+      <form id="searchPopup" class="form-inline">
+        <h5>Search for wrecks within:</h5>
+
+        <div class="form-group" style="margin-bottom: 6%;">
+          <input type="number" class="form-control" id="milesInput" placeholder="50 miles">
+            <button id="popupSearchButton" type="submit" class="btn btn-primary">Go</button>
+        </div>
+      </form>`;
 
     var popup = L.popup()
       .setLatLng(e.latlng)
@@ -280,16 +339,15 @@ $(document).ready(function() {
     $('#popupSearchButton').on('click', function(event) {
 
       map.closePopup();
-
       event.preventDefault();
+
+      $('#results-list').empty();
 
       var mileRadius = $('#milesInput').val().trim();
 
       if(markers) {
         markers.clearLayers();
       }
-
-      $('#resultsList').empty();
 
       markerMap = {};
 
@@ -304,22 +362,14 @@ $(document).ready(function() {
           }
 
       }).done(function(res) {
-
           buildMarkers(res);
-
           buildList(res);
-
         });
-
       });
-
   });
 
 
   function setBasemap(basemap) {
-
-      console.log(baseLayer);
-
       if (baseLayer) {
         map.removeLayer(baseLayer);
       }
@@ -327,99 +377,90 @@ $(document).ready(function() {
       baseLayer = L.esri.basemapLayer(basemap);
 
       map.addLayer(baseLayer);
-
     }
 
 
   var buildMarkers = function(res) {
-
     markerMap = {};
-
     markerGroup = [];
 
     if(markers) {
-
         markers.clearLayers();
-
     }
 
-
     for(var i = 0; i < res.length; i++) {
-
       var name = res[i].properties.vesslterms;
-
       var location = res[i].geometry.coordinates[1] + ',' + res[i].geometry.coordinates[0];
-
       var history = res[i].properties.history;
-
-      var favButton = '<br><button id="' + res[i]._id + '" class="favorite btn btn-warning btn-sm"> <span class="glyphicon glyphicon-star-empty"> </span> Add Favorite </button>';
-
-      var nytButton = '<button class="times research btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> NY Times </button>';
-
-      var wikiButton = '<button class="wiki research btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> Wikipedia</button>';
-
-      var locButton = '<button class="congress research btn btn-success btn-sm" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> LOC </button>';
-
-      var swapoutMap = '<button id="swapMapButton" class="btn btn-warning btn-sm satButton">Toggle Base Map</button>';
-
+      var db_id = res[i]._id;
+      var nytButton = '<button class="times research mdl-button mdl-js-button mdl-button--raised mdl-button--colored" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> NY Times </button>';
+      var wikiButton = '<button class="wiki research mdl-button mdl-js-button mdl-button--raised mdl-button--colored" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> Wikipedia</button>';
+      var locButton = '<button class="congress research mdl-button mdl-js-button mdl-button--raised mdl-button--colored" value=' + res[i]._id + '><span class="glyphicon glyphicon-folder-open"></span> LOC </button>';
+      var swapoutMap = '<button id="swapMapButton" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored satButton">Toggle View</button>';
 
       if(name === '') name = 'Not Named';
-
       if(history === '') history = 'No known history in database'
-
 
       var marker = L.marker( [ res[i].geometry.coordinates[1], res[i].geometry.coordinates[0] ]);
 
-      marker.bindPopup('<h3><em>' + name + '</em></h3><h4>' + location + '</h4>' + history + favButton + swapoutMap + nytButton + wikiButton + locButton);
+      marker.bindPopup(
+        `<div class="ship-name"> ${name} </div>
+        <hr>
+         <div class="ship-position"> ${location} </div>
+         <div class=ship-description> ${history} </div>
+         <div class="ship-id">ID: ${db_id}</div>
+            ${swapoutMap}
+            <hr>
+           ${nytButton} ${wikiButton} ${locButton}`
+         );
 
       markerGroup.push(marker);
 
       markerMap[res[i]._id] = marker;
-
     }
 
-
-
     markers = L.layerGroup(markerGroup);
-
     map.addLayer(markers);
-
   };
 
 
   var buildList = function(res) {
 
+    $('#search-hits').html(res.length + ' records found');
+
     for(var i = 0; i < res.length; i++) {
 
-      var item = $('<div class="list-group-item listItem">');
+      if(favorites.includes(res[i]._id)) {
+        var isSelected = 'selected';
+        var favIcon = "star";
+      } else {
+        var isSelected = null;
+        var favIcon = "star_border";
+      }
+      var li = $('<li class="list-item">').attr('value', res[i]._id);
+      var fav = $(`<i class="material-icons favorite-button ${isSelected}" id="${res[i]._id}">${favIcon}</i>`)
+      var name = $('<div class="ship-name">').html(res[i].properties.vesslterms);
+      var location = $('<div class="ship-position">').html(res[i].geometry.coordinates[1] + ', ' + res[i].geometry.coordinates[0]);
+      var db_id = $('<div class="ship-id">').html('ID : ' + res[i]._id);
+      var desc = $('<p class="ship-description">').html(res[i].properties.history);
 
-      item.attr('value', res[i]._id);
+      li.append(name);
 
-      var name = $('<h3>').css('font-style', 'italic').html(res[i].properties.vesslterms);
+      li.append(fav);
+      li.append('<hr>');
+      li.append(location);
+      li.append(desc);
+      li.append(db_id);
 
-      var location = $('<h4>').html(res[i].geometry.coordinates[1] + ', ' + res[i].geometry.coordinates[0]);
-
-      var desc = $('<div>').css('font-style', 'initial').html(res[i].properties.history);
-
-      item.append(name);
-      item.append(location);
-      item.append(desc);
-
-      $('#resultsList').append(item);
-
+      $('#results-list').append(li);
     }
-
   };
 
 
   var gotoMarker = function(id) {
-
      var marker = markerMap[id];
-
      marker.openPopup();
-
      map.panTo(new L.LatLng( marker.getLatLng().lat, marker.getLatLng().lng), 8);
-
   }
 
 var parseDescriptionDates = function(str) {
@@ -482,48 +523,27 @@ var parseDescriptionDates = function(str) {
 }
 
 
-  $('#openNav').on('click', function() {
-    nav.css('width', '27%');
-  });
 
-
-  $('#closeNav').on('click', function() {
-    nav.css('width', "0%");
-  });
-
-
-
-  $('#searchSubmit').on('click', function(event) {
+  $('#search-submit').on('click', function(event) {
 
     event.preventDefault();
 
     if(markers) markers.clearLayers();
 
-    $('#resultsList').empty();
+    $('#results-list').empty();
 
     markerMap = {};
 
     var name = $('#nameSearch').val().trim().toUpperCase();
-
     var string = $('#textSearch').val().trim();
-
-    var lat = $('#latitudeSearch').val().trim();
-    var lon = $('#longitudeSearch').val().trim();
-    var radius = $('#radiusSearch').val().trim();
-
     var after = $('#afterRangeSearch').val().trim();
     var before = $('#beforeRangeSearch').val().trim();
-
     var hasName = $('#hasName').prop('checked');
     var hasHistory = $('#hasHistory').prop('checked');
-
     var id = $('#idSearch').val().trim();
 
-
     if(id) {
-
       $.ajax({
-
         url: 'http://localhost/id',
         method: 'GET',
         data: {
@@ -531,43 +551,25 @@ var parseDescriptionDates = function(str) {
         }
 
       }).done(function(res) {
-
         buildMarkers(res);
-
         buildList(res);
-
       })
 
     } else
-
       {
-
         $.ajax({
           url: 'http://localhost/wreck',
           method: 'GET',
           data: {
-
-            location: {
-                lat: lat,
-                lon: lon,
-                radius: radius * 1609
-              },
-
               name: name,
-
               before: before,
               after: after,
-
               hasName: hasName,
-
               string: string
           }
           }).done(function(res) {
-
               buildMarkers(res);
-
               buildList(res);
-
             })
       }
   })
@@ -576,23 +578,16 @@ var parseDescriptionDates = function(str) {
         var id = $(this).attr("data-id");
 
         $.ajax({
-
           url: 'http://localhost/id',
           method: 'GET',
           data: {
             id: id
           }
-
         }).done(function(res) {
-
-          buildMarkers(res);
-
-          gotoMarker(res[0]._id);
-
-          buildList(res);
-
-        })
-
+            buildMarkers(res);
+            gotoMarker(res[0]._id);
+            buildList(res);
+          })
       })
 
 })

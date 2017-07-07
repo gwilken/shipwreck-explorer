@@ -15,6 +15,23 @@ var router = function(app) {
     })
   })
 
+  app.get('/favs', function (req, res) {
+    var ids = [];
+    ids = req.query.ids.map((element) => {
+      return ObjectID(element);
+    })
+
+    resultsArr = mongo.collection.find({
+      _id: {
+        $in: ids
+        }
+    }).toArray();
+
+    resultsArr.then(function(arr) {
+      res.send(arr);
+    })
+  })
+
   app.get('/string', function (req, res) {
     var re = req.query.string;
     var query = {};
@@ -101,26 +118,6 @@ var router = function(app) {
       query[field] = operator;
     }
 
-
-    if(req.query.location.lat && req.query.location.lon && req.query.location.radius) {
-      var field = 'geometry';
-      var operator1 = {};
-      var operator2 = {};
-      var operator3 = {};
-
-      operator3['type'] = "Point";
-      operator3['coordinates'] = [ parseFloat(req.query.location.lon), parseFloat(req.query.location.lat) ];
-
-      operator2['$geometry'] = operator3;
-
-      operator2['$maxDistance'] = parseFloat(req.query.location.radius);
-
-      operator1['$near'] = operator2;
-
-      query[field] = operator1;
-    };
-
-
     if(parseInt(req.query.hasName) === 1) {
       var field = 'properties.vesslterms';
       var operator = {};
@@ -128,7 +125,6 @@ var router = function(app) {
 
       query[field] = operator;
     };
-
 
     if(req.query.name){
       var field = 'properties.vesslterms';

@@ -2,23 +2,22 @@
 body {
 	margin:0;
 	padding:0;
-    font-family: 'Open Sans', sans-serif;
-	}
-
-h4 {
-    font-style: normal;
-    font-weight: normal;
+  font-family: 'Open Sans', sans-serif;
 }
 
-
-#pageTitle {
-    text-align: left;
-    margin: 0% 8% 8% 8%;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 43px;
+ul {
+	list-style: none;
 }
 
-#map { 
+li {
+	margin: 0% 8% 0% 0%;
+}
+
+li:hover {
+  background-color: rgba(200,200,200, .8);
+}
+
+#map {
 	position: absolute;
 	top:0;
 	bottom:0;
@@ -27,22 +26,22 @@ h4 {
 	z-index: 1;
 }
 
-#sideNav {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 10;
-    top: 0;
-    right: 0;
-    background-color: lightgrey;
-    overflow-x: hidden;
-    transition: 0.1s;
-    padding-top: 60px;
+#side-nav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  background-color: rgba(240,240,240,.8);
+  overflow-x: hidden;
+  transition: 0.1s;
+  padding-top: 60px;
 }
 
-#openNav {
+#open-nav {
 	position: fixed;
-	top: 0%;
+	top: 2%;
 	right: 2%;
 	z-index: 9;
 	color: grey;
@@ -50,102 +49,170 @@ h4 {
 	cursor: pointer;
 }
 
-#sideNav a:hover, .offcanvas a:focus{
+#side-nav a:hover, .offcanvas a:focus{
     color: #f1f1f1;
 }
 
-#closeNav {
+#close-nav {
     position: absolute;
     cursor: pointer;
     color: darkgrey;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
+    top: 2%;
+    right: 6%;
+    font-size: 50px;
     margin-left: 50px;
 }
 
-#closeNav:hover {
+#close-nav:hover {
     color: black;
 }
 
-#searchForm {
-	margin: 0% 12%;
+#search-form {
+	margin: 0% 8%;
 }
 
-#loginForm {
-    margin: 0% 12%;
+#search-hits {
+	font-size: 14pt;
+	margin: -2% 0% 0% 12%;
 }
 
-#emailInput {
-    width: initial;
+#results-container {
 }
 
-#rememberMeGroup {
-    margin-top: 3%;
+
+#results-list {
+	list-style: none;
+  margin: 2% 0%;
 }
 
-#resultsList {
-    margin: 2% 6%; 
+.ship-name {
+	display: inline;
+	font-family: "Roboto","Helvetica","Arial",sans-serif;
+	font-weight: 400;
+	font-style: italic;
+	font-size: 34px;
+	line-height: 40px;
+	margin: 2% 0;
 }
 
-.listItem:hover {
-    background-color: #D6EAF8;
+.ship-position {
+	font-family: "Roboto","Helvetica","Arial",sans-serif;
+	font-weight: 400;
+	font-style: italic;
+	font-size: 21px;
+	line-height: 32px;
+	margin: 2% 0;
 }
 
-.sign-out {
-    margin-left: 10px;
+.ship-description {
+  line-height: 16px;
+	margin-right: 3%;
+}
+
+.ship-id {
+	margin: 3% 0% 2% 0%;
+	font-weight: bold;
+}
+
+.favorite-button {
+	cursor: pointer;
+	margin-left: 5%;
+	font-size: 32px;
+	display: inline;
+	position: relative;
+	top: 3px;
+}
+
+.show-favs {
+
+}
+
+.mdl-textfield {
+	margin: -3% 0% 0% 0%;
+}
+
+.mdl-textfield__label {
+  color: rgba(0,0,0,0.5);
+}
+
+.mdl-checkbox__label {
+  font-size: 14px;
+	color: rgba(0,0,0,0.5);
+}
+
+.checkbox-container {
+	margin: 0% 0%;
+}
+
+.comment-text {
+	line-height: 1%;
+}
+
+.button-container {
+	text-align: center;
+	margin: 0% -8%;
+}
+
+.search-buttons {
+	margin: 1% 0%;
+}
+
+.list-item:hover {
+  background-color: #D6EAF8;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 0px;
 }
 
 .left-bar {
-    width: 30%;
-    max-height: 80%;
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    z-index: 11;
-    overflow: auto;
-    border-radius: 3%;
+  width: 30%;
+  max-height: 80%;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 11;
+  overflow: auto;
+  border-radius: 3%;
 }
 
 .articles {
-    max-height: 100%;
-    overflow: auto;
-    background-color: white;
-
+  max-height: 100%;
+  overflow: auto;
+  background-color: white;
 }
 
 .article-heading {
-    background-color: silver;
-    color: white;
-    font-weight: bold;
-    padding: 10px;
-    position: relative;
-    cursor: pointer;
+  background-color: silver;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
 }
 
 .article-content {
-    padding: 20px 40px;
+  padding: 20px 40px;
 }
 
 .favorites {
-    background-color: white;
+  background-color: white;
 }
 
 .fav-heading {
-    background-color: silver;
-    color: white;
-    font-weight: bold;
-    padding: 10px;
-    position: relative;
-    cursor: pointer;
-    border-bottom: 1px solid white;
-
+  background-color: silver;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+  border-bottom: 1px solid white;
 }
 
 .fav-minus, .fav-plus, .article-minus, .article-plus {
-    float: right;
-    position: relative;
-    right: 2%;
+  float: right;
+  position: relative;
+  right: 2%;
 }
 
 .fav-content {
@@ -153,17 +220,16 @@ h4 {
 }
 
 .fav-wreck {
-    border: 1px solid lightgray;
-    padding: 15px 10px;
-
+  border: 1px solid lightgray;
+  padding: 15px 10px;
 }
 
 .fav-label {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .remove {
-    margin-left: 3px;
+  margin-left: 3px;
 }
 
 .favorite {
@@ -171,8 +237,9 @@ h4 {
 }
 
 .satButton {
-    margin: 4% 0%;
-    width: 50%;
+    margin: 4% 12%;
+    width: 75%;
+		text-align: center;
 }
 
 .form-inline .form-control {
@@ -187,9 +254,9 @@ h4 {
     margin: 0% 8%;
 }
 
-/*.rangeInput {
-    display: inline;
-}*/
+.range-input {
+    display: flex;
+}
 
 .range {
     width: 20%;
@@ -213,4 +280,3 @@ h4 {
 .btn-success {
     background-color: #449d44 !important;
 }
-
