@@ -6,26 +6,59 @@ $(document).ready(function() {
   var currentBaseMap = 'Oceans';
   var baseLayer = L.esri.basemapLayer(currentBaseMap).addTo(map);
 
+//  map.zoomControl.setPosition('topright');
+
   var markers;
   var markerMap = {};
   var markerGroup = [];
 
   var favorites = [];
 
-  if (localStorage.getItem("favorites")) {
-      favorites = JSON.parse(localStorage.getItem("favorites"));
+  var showFavorites = function() {
+    $.ajax({
+      url: 'http://localhost/favs',
+      method: 'GET',
+      data: {
+        ids: favorites
+      }
+    }).done(function(res) {
+      if(markers) markers.clearLayers();
+
+      $('#results-list').empty();
+
+      markerMap = {};
+
+      buildMarkers(res);
+      buildList(res);
+    })
   }
 
+  if (localStorage.getItem("favorites")) {
+      favorites = JSON.parse(localStorage.getItem("favorites"));
+      showFavorites();
+  }
+
+  var openNav = function() {
+    nav.css('width', '30%');
+    $('#open-nav').hide();
+    $('#close-nav').show();
+  }
+
+  var closeNav = function() {
+    nav.css('width', "0%");
+    $('#close-nav').hide();
+    $('#open-nav').show();
+  }
 
   var nav = $('#side-nav');
   $(".articles").hide();
 
   $('#open-nav').on('click', function() {
-    nav.css('width', '27%');
+    openNav();
   });
 
   $('#close-nav').on('click', function() {
-    nav.css('width', "0%");
+    closeNav();
   });
 
   $('#clear-markers').on('click', function(event) {
@@ -45,24 +78,9 @@ $(document).ready(function() {
 
   $('#show-favs').on('click', function(event) {
     event.preventDefault();
-
-    $.ajax({
-      url: 'http://localhost/favs',
-      method: 'GET',
-      data: {
-        ids: favorites
-      }
-    }).done(function(res) {
-      if(markers) markers.clearLayers();
-
-      $('#results-list').empty();
-
-      markerMap = {};
-
-      buildMarkers(res);
-      buildList(res);
-    })
+    showFavorites();
   })
+
 
 
   $(document).on('click', '.list-item', function() {
@@ -110,37 +128,20 @@ $(document).on('click', '.favorite-button', function(event) {
   });
 
   $(document).on('click', '.times', function(event) {
-
     event.preventDefault();
-    $(".articles").show();
-    $(".article-plus").hide();
-    $(".article-minus").show();
-    $(".article-content").show();
-    $(".articles").css("width", "100%");
 
-     var id = $(this).attr('value');
+    var id = $(this).attr('value');
 
     $.ajax({
-
       url: 'http://localhost/id',
       method: 'GET',
       data: {
         id: id
       }
-
     }).done(function(res) {
-
         var searchTerm = res[0].properties.vesslterms;
-
-        var start = parseDescriptionDates(res[0].properties.history);
-
-        console.log('search', searchTerm);
-        console.log('date', start);
-
         var timesKey = "44c44dc78c634b63b56fcceefdbc86ef";
-
-        var timesURLBase = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" +
-          timesKey + "&q=";
+        var timesURLBase = "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=" + timesKey + "&q=";
 
         let timesURL = timesURLBase;
         timesURL += searchTerm;
@@ -149,17 +150,23 @@ $(document).on('click', '.favorite-button', function(event) {
           url: timesURL,
           method: "GET",
           data: {
-            startDate: start,
+            startDate: res[0].properties.yearsunk,
             endDate: null
           }
           }).done( function(response) {
-            if(response!=null){
+
+            if(response !== null) {
+
               console.log(response);
               let articleTitles = [];
               let articleParagraphs = [];
               let articleLinks = [];
 
               let articleNum = response.response.docs.length;
+
+              $('#results-list').empty();
+              $('#search-hits').html(articleNum + ' articles found');
+
               for(var i = 0; i < articleNum; i++){
                 articleTitles[i] = response.response.docs[i].headline.main;
                 articleParagraphs[i] = response.response.docs[i].lead_paragraph;
@@ -173,13 +180,11 @@ $(document).on('click', '.favorite-button', function(event) {
                 $paragraphElement.html(articleParagraphs[i]);
                 $linkElement.attr("href", articleLinks[i]).attr("target", "_blank");
 
-                $("#times-content").append($titleElement).append($paragraphElement).append($linkElement).append($("<hr>"));
+                $('#results-list').append($titleElement).append($paragraphElement).append($linkElement).append($("<hr>"));
               }
-              console.log(articleTitles, articleParagraphs, articleLinks);
             }
           });
       });
-
   });
 
   $(document).on('click', '.wiki', function(event) {
@@ -221,30 +226,31 @@ $(document).on('click', '.favorite-button', function(event) {
               }
 
             }).done( function(response) {
-              let articleTitles = [];
-              let articleParagraphs = [];
-              let articleLinks = [];
+                let articleTitles = [];
+                let articleParagraphs = [];
+                let articleLinks = [];
+                let articleNum = response[1].length;
 
-              console.log(response);
-              let articleNum = response[1].length;
-              for(var i = 0; i < articleNum; i++){
-              articleTitles[i] = response[1][i];
-              articleParagraphs[i] = response[2][i];
-              articleLinks[i] = response[3][i];
+                $('#results-list').empty();
+                $('#search-hits').html(articleNum + ' articles found');
 
-              var $titleElement = $("<h4>");
-              var $paragraphElement = $("<p>");
-              var $linkElement = $("<a>Full Article</a>");
+                for(var i = 0; i < articleNum; i++) {
+                  articleTitles[i] = response[1][i];
+                  articleParagraphs[i] = response[2][i];
+                  articleLinks[i] = response[3][i];
 
-              $titleElement.html(articleTitles[i]);
-              $paragraphElement.html(articleParagraphs[i]);
-              $linkElement.attr("href", articleLinks[i]).attr("target", "_blank");
+                  var $titleElement = $("<h4>");
+                  var $paragraphElement = $("<p>");
+                  var $linkElement = $("<a>Full Article</a>");
 
-              $("#wiki-content").append($titleElement).append($paragraphElement).append($linkElement).append($("<hr>"));
-              }
+                  $titleElement.html(articleTitles[i]);
+                  $paragraphElement.html(articleParagraphs[i]);
+                  $linkElement.attr("href", articleLinks[i]).attr("target", "_blank");
+
+                  $('#results-list').append($titleElement).append($paragraphElement).append($linkElement).append($("<hr>"));
+                }
             });
         });
-
   });
 
 
@@ -284,8 +290,11 @@ $(document).on('click', '.favorite-button', function(event) {
           let articleTitles = [];
           let printLinks = [];
           let articleDescriptions = [];
+          let articleNum = results.results.length;
 
-          articleNum = results.results.length;
+          $('#results-list').empty();
+          $('#search-hits').html(articleNum + ' articles found');
+
           for(var i = 0; i< articleNum; i++){
             articleTitles[i] = results.results[i].subjects[0];
             printLinks[i] = results.results[i].image.full.substring(2);
@@ -300,17 +309,10 @@ $(document).on('click', '.favorite-button', function(event) {
             $linkElement.attr("href", printLinks[i]).attr("target", "_blank");
             $descriptionElement.html(articleDescriptions[i]);
 
-            $("#congress-content").append($titleElement).append($descriptionElement).append($linkElement).append($("<hr>"));
+            $('#results-list').append($titleElement).append($descriptionElement).append($linkElement).append($("<hr>"));
           }
         });
-
     });
-  });
-
-  $(document).on('click', '#clear-articles', function(){
-    $("#times-content").empty();
-    $("#wiki-content").empty();
-    $("#congress-content").empty();
   });
 
 
@@ -373,9 +375,7 @@ $(document).on('click', '.favorite-button', function(event) {
       if (baseLayer) {
         map.removeLayer(baseLayer);
       }
-
       baseLayer = L.esri.basemapLayer(basemap);
-
       map.addLayer(baseLayer);
     }
 
@@ -389,6 +389,15 @@ $(document).on('click', '.favorite-button', function(event) {
     }
 
     for(var i = 0; i < res.length; i++) {
+
+      if(favorites.includes(res[i]._id)) {
+        var isSelected = 'selected';
+        var favIcon = "star";
+      } else {
+        var isSelected = null;
+        var favIcon = "star_border";
+      }
+
       var name = res[i].properties.vesslterms;
       var location = res[i].geometry.coordinates[1] + ',' + res[i].geometry.coordinates[0];
       var history = res[i].properties.history;
@@ -405,13 +414,18 @@ $(document).on('click', '.favorite-button', function(event) {
 
       marker.bindPopup(
         `<div class="ship-name"> ${name} </div>
+        <i class="material-icons favorite-button ${isSelected}" id="${res[i]._id}">${favIcon}</i>
         <hr>
          <div class="ship-position"> ${location} </div>
          <div class=ship-description> ${history} </div>
          <div class="ship-id">ID: ${db_id}</div>
+         <div class="sat-button-container">
             ${swapoutMap}
+         </div>
             <hr>
-           ${nytButton} ${wikiButton} ${locButton}`
+        <div class="research-buttons">
+           ${nytButton} ${wikiButton} ${locButton}
+        </div>`, {maxWidth: 350}
          );
 
       markerGroup.push(marker);
@@ -437,6 +451,7 @@ $(document).on('click', '.favorite-button', function(event) {
         var isSelected = null;
         var favIcon = "star_border";
       }
+
       var li = $('<li class="list-item">').attr('value', res[i]._id);
       var fav = $(`<i class="material-icons favorite-button ${isSelected}" id="${res[i]._id}">${favIcon}</i>`)
       var name = $('<div class="ship-name">').html(res[i].properties.vesslterms);
@@ -445,12 +460,11 @@ $(document).on('click', '.favorite-button', function(event) {
       var desc = $('<p class="ship-description">').html(res[i].properties.history);
 
       li.append(name);
-
       li.append(fav);
-      li.append('<hr>');
       li.append(location);
       li.append(desc);
       li.append(db_id);
+      li.append('<hr>');
 
       $('#results-list').append(li);
     }
@@ -463,69 +477,8 @@ $(document).on('click', '.favorite-button', function(event) {
      map.panTo(new L.LatLng( marker.getLatLng().lat, marker.getLatLng().lng), 8);
   }
 
-var parseDescriptionDates = function(str) {
-
-  var dateRegEx = /((0?[1-9]|10|11|12)(-|\/)([0-9]|(0[0-9])|([12])([0-9]?)|(3[01]?))(-|\/)((\d{4})|(\d{2}))|(0?[2469]|11)(-|\/)((0[0-9])|([12])([0-9]?)|(3[0]?))(-|\/)((\d{4}|\d{2})))/g;
-  var sunkRegEx = /([Ss][Uu][Nn][Kk]) ((0?[1-9]|10|11|12)(-|\/)([0-9]|(0[0-9])|([12])([0-9]?)|(3[01]?))(-|\/)((\d{4})|(\d{2}))|(0?[2469]|11)(-|\/)((0[0-9])|([12])([0-9]?)|(3[0]?))(-|\/)((\d{4}|\d{2})))/g;
-
-  let dates = str.match(dateRegEx);
-
-        var sinkDate = null;
-
-        if(dates!==null){
-
-            if(dates.length == 2){
-                sinkDate = dates[0];
-            }else{
-
-                dates = str.match(sunkRegEx);
-                console.log(dates);
-                sinkDate = dates[0].split(" ")[1];
-
-            }
-
-            let dateExpansion = sinkDate.split("/");
-            let sinkYear = dateExpansion[2];
-
-            if (sinkYear.length==2){
-
-                if(parseInt(sinkYear) < 17){
-                    sinkYear = "20" + sinkYear;
-
-                }else{
-
-                    sinkYear = "19" + sinkYear;
-
-                }
-            }
-
-            let sinkMonth = dateExpansion[0];
-
-            if(sinkMonth.length==1){
-
-                sinkMonth = "0" + sinkMonth;
-
-            }
-
-            let sinkDay = dateExpansion[1];
-
-            if(sinkDay.length==1){
-
-                sinkDay = "0" + sinkDay;
-
-            }
-
-            sinkDate = sinkYear + sinkMonth + sinkDay;
-        }
-
-        return(sinkDate);
-
-}
-
-
 
   $('#search-submit').on('click', function(event) {
-
     event.preventDefault();
 
     if(markers) markers.clearLayers();
@@ -554,7 +507,6 @@ var parseDescriptionDates = function(str) {
         buildMarkers(res);
         buildList(res);
       })
-
     } else
       {
         $.ajax({
@@ -574,20 +526,6 @@ var parseDescriptionDates = function(str) {
       }
   })
 
-      $(document).on("click", ".go-map", function() {
-        var id = $(this).attr("data-id");
-
-        $.ajax({
-          url: 'http://localhost/id',
-          method: 'GET',
-          data: {
-            id: id
-          }
-        }).done(function(res) {
-            buildMarkers(res);
-            gotoMarker(res[0]._id);
-            buildList(res);
-          })
-      })
+  openNav();
 
 })
