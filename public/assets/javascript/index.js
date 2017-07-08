@@ -289,16 +289,18 @@ $(document).ready(function() {
   map.on('dblclick', function(e) {
 
     var popupSearch =
-      `<h5> Positon: </h5>
-      <p> ${e.latlng.lat} , ${e.latlng.lng} </p>
+      `<h6> Positon: </h6>
+      <h5 class="popup-position"> ${e.latlng.lat} , ${e.latlng.lng} </h5>
 
-      <form id="searchPopup" class="form-inline">
-        <h5>Search for wrecks within:</h5>
+      <form id="searchPopup">
 
-        <div class="form-group" style="margin-bottom: 6%;">
-          <input type="number" class="form-control" id="milesInput" placeholder="50 miles">
-            <button id="popupSearchButton" type="submit" class="btn btn-primary">Go</button>
+        <h6>Search within...</h6>
+        <div class="mdl-textfield mdl-js-textfield popup-search">
+          <input class="mdl-textfield__input" type="number" id="milesInput" placeholder="50 miles">
+          <button id="popupSearchButton" type="submit" class="search-buttons mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Go</button>
         </div>
+
+
       </form>`;
 
     var popup = L.popup()

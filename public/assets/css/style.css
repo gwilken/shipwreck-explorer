@@ -17,6 +17,10 @@ li:hover {
   background-color: rgba(200,200,200, .8);
 }
 
+h6 {
+	line-height: 18px;
+}
+
 #map {
 	position: absolute;
 	top:0;
@@ -132,6 +136,11 @@ li:hover {
   margin: 2% 0%;
 }
 
+.info {
+	margin: 0 8%;
+	line-height: 125%;
+}
+
 .ship-name {
 	display: inline;
 	font-family: "Roboto","Helvetica","Arial",sans-serif;
@@ -158,7 +167,7 @@ li:hover {
 
 .ship-id {
 	margin: 3% 0% 2% 0%;
-	font-size: 21px;
+	font-size: 17px;
 }
 
 .favorite-button {
@@ -168,6 +177,10 @@ li:hover {
 	display: inline;
 	position: relative;
 	top: 3px;
+}
+
+.popup-position {
+	margin: 0% 0%;
 }
 
 .mdl-textfield {
@@ -287,12 +300,21 @@ li:hover {
     width: 60%;
 }
 
-#milesInput: {
-    display: inherit;
+.popup-search {
+	text-align: left;
+}
+
+#milesInput {
+	position: relative;
+	width: 30%;
+  display: inline-block;
 }
 
 #popupSearchButton {
-    margin: 0% 8%;
+	position: relative;
+	display: inline-block;
+	margin: 0 0 0 10%;
+	bottom: 8px;
 }
 
 .range-input {
