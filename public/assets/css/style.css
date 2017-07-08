@@ -118,7 +118,8 @@ li:hover {
 
 #search-hits {
 	font-size: 14pt;
-	margin: -2% 0% 0% 12%;
+	font-style: italic;
+	margin: -5% 0% -3% 12%;
 }
 
 #results-container {
@@ -167,10 +168,6 @@ li:hover {
 	display: inline;
 	position: relative;
 	top: 3px;
-}
-
-.show-favs {
-
 }
 
 .mdl-textfield {

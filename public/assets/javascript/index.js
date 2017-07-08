@@ -6,8 +6,6 @@ $(document).ready(function() {
   var currentBaseMap = 'Oceans';
   var baseLayer = L.esri.basemapLayer(currentBaseMap).addTo(map);
 
-//  map.zoomControl.setPosition('topright');
-
   var markers;
   var markerMap = {};
   var markerGroup = [];
@@ -90,30 +88,28 @@ $(document).ready(function() {
      map.panTo(new L.LatLng( marker.getLatLng().lat, marker.getLatLng().lng), 8);
   });
 
-$(document).on('click', '.favorite-button', function(event) {
-  event.preventDefault();
+  $(document).on('click', '.favorite-button', function(event) {
+    event.preventDefault();
 
-  id = $(this).attr("id");
+    id = $(this).attr("id");
 
-  if($(this).hasClass('selected')) {
-    $(this).removeClass('selected');
-    $(this).html('star_border');
+    if($(this).hasClass('selected')) {
+      $(this).removeClass('selected');
+      $(this).html('star_border');
 
-    if(favorites.indexOf(id) !== -1) {
-      favorites.splice(favorites.indexOf(id), 1);
+      if(favorites.indexOf(id) !== -1) {
+        favorites.splice(favorites.indexOf(id), 1);
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+      }
+
+    } else {
+      $(this).addClass('selected');
+      $(this).html('star');
+      favorites.push(id);
       localStorage.setItem("favorites", JSON.stringify(favorites));
+      console.log(favorites);
     }
-
-  } else {
-    $(this).addClass('selected');
-    $(this).html('star');
-    favorites.push(id);
-    localStorage.setItem("favorites", JSON.stringify(favorites));
-    console.log(favorites);
-  }
-
-
-})
+  })
 
   $(document).on('click', '#swapMapButton', function(event) {
     event.preventDefault();
@@ -188,32 +184,19 @@ $(document).on('click', '.favorite-button', function(event) {
   });
 
   $(document).on('click', '.wiki', function(event) {
-
     event.preventDefault();
-    $(".articles").show();
-    $(".article-plus").hide();
-    $(".article-minus").show();
-    $(".article-content").show();
-    $(".articles").css("width", "100%");
 
      var id = $(this).attr('value');
 
-     console.log('wiki', id);
-
-
       $.ajax({
-
         url: 'http://localhost/id',
         method: 'GET',
         data: {
           id: id
         }
-
       }).done(function(res) {
 
           var searchTerm = res[0].properties.vesslterms;
-
-          console.log(searchTerm);
 
           let wikiURL = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + searchTerm + "&format=json&callback=?";
 
@@ -224,7 +207,6 @@ $(document).on('click', '.favorite-button', function(event) {
               data: function(data, status, jqXHR) {
                 console.log(data);
               }
-
             }).done( function(response) {
                 let articleTitles = [];
                 let articleParagraphs = [];
@@ -255,37 +237,25 @@ $(document).on('click', '.favorite-button', function(event) {
 
 
   $(document).on('click', '.congress', function(event) {
-
     event.preventDefault();
-    $(".articles").show();
-    $(".article-plus").hide();
-    $(".article-minus").show();
-    $(".article-content").show();
-    $(".articles").css("width", "100%");
 
     var id = $(this).attr('value');
 
-    console.log('congress', id);
-
    $.ajax({
-
         url: 'http://localhost/id',
         method: 'GET',
         data: {
           id: id
         }
-
       }).done(function(res) {
 
         let congressURL = "https://loc.gov/pictures/search/";
         let query = res[0].properties.vesslterms;
 
         $.getJSON(congressURL, {
-
           type: "search",
           q: query.replace(/ /g, "%20"),
           fo: 'json'
-
         }).done(function(results) {
           let articleTitles = [];
           let printLinks = [];
@@ -319,7 +289,6 @@ $(document).on('click', '.favorite-button', function(event) {
   map.on('dblclick', function(e) {
 
     var popupSearch =
-
       `<h5> Positon: </h5>
       <p> ${e.latlng.lat} , ${e.latlng.lng} </p>
 
@@ -336,7 +305,6 @@ $(document).on('click', '.favorite-button', function(event) {
       .setLatLng(e.latlng)
       .setContent(popupSearch)
       .openOn(map);
-
 
     $('#popupSearchButton').on('click', function(event) {
 
@@ -429,7 +397,6 @@ $(document).on('click', '.favorite-button', function(event) {
          );
 
       markerGroup.push(marker);
-
       markerMap[res[i]._id] = marker;
     }
 
@@ -507,8 +474,7 @@ $(document).on('click', '.favorite-button', function(event) {
         buildMarkers(res);
         buildList(res);
       })
-    } else
-      {
+    } else {
         $.ajax({
           url: 'http://localhost/wreck',
           method: 'GET',
