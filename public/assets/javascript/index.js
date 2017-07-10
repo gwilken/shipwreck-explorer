@@ -14,7 +14,7 @@ $(document).ready(function() {
 
   var showFavorites = function() {
     $.ajax({
-      url: 'http://localhost/favs',
+      url: '/favs',
       method: 'GET',
       data: {
         ids: favorites
@@ -129,7 +129,7 @@ $(document).ready(function() {
     var id = $(this).attr('value');
 
     $.ajax({
-      url: 'http://localhost/id',
+      url: '/id',
       method: 'GET',
       data: {
         id: id
@@ -189,7 +189,7 @@ $(document).ready(function() {
      var id = $(this).attr('value');
 
       $.ajax({
-        url: 'http://localhost/id',
+        url: '/id',
         method: 'GET',
         data: {
           id: id
@@ -242,7 +242,7 @@ $(document).ready(function() {
     var id = $(this).attr('value');
 
    $.ajax({
-        url: 'http://localhost/id',
+        url: '/id',
         method: 'GET',
         data: {
           id: id
@@ -291,19 +291,16 @@ $(document).ready(function() {
     var popupSearch =
       `<h6> Positon: </h6>
       <h5 class="popup-position"> ${e.latlng.lat} , ${e.latlng.lng} </h5>
-
+      <hr>
       <form id="searchPopup">
-
         <h6>Search within...</h6>
         <div class="mdl-textfield mdl-js-textfield popup-search">
           <input class="mdl-textfield__input" type="number" id="milesInput" placeholder="50 miles">
           <button id="popupSearchButton" type="submit" class="search-buttons mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Go</button>
         </div>
-
-
       </form>`;
 
-    var popup = L.popup()
+    var popup = L.popup({maxWidth: 225})
       .setLatLng(e.latlng)
       .setContent(popupSearch)
       .openOn(map);
@@ -325,7 +322,7 @@ $(document).ready(function() {
 
       $.ajax({
 
-        url: 'http://localhost/proximity',
+        url: '/proximity',
         method: 'GET',
           data: {
             lat: e.latlng.lat,
@@ -466,7 +463,7 @@ $(document).ready(function() {
 
     if(id) {
       $.ajax({
-        url: 'http://localhost/id',
+        url: '/id',
         method: 'GET',
         data: {
           id: id
@@ -478,7 +475,7 @@ $(document).ready(function() {
       })
     } else {
         $.ajax({
-          url: 'http://localhost/wreck',
+          url: '/wreck',
           method: 'GET',
           data: {
               name: name,

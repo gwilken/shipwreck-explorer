@@ -11,7 +11,7 @@ const mongo = require('./model/mongo.js');
 
 app.use(cors());
 
-var PORT = 80;
+var PORT = 8000;
 
 app.set('port', PORT);
 
