@@ -1,126 +1,23 @@
-# Tempest
+# US Shipwreck Locator
 
-Search for shipwrecks in US waters. Built with Node, MongoDB, and Javascript.
+Search, locate, and find information for 17,000+ shipwrecks in United States territorial and surrounding waters. Built with Node.js, Express, and MongoDB.
 
+## Search
 
-API endpoints and definitions:
+Search for a ship by keyword, ship name, date sunk range, or just search within an area for all wrecks.
 
-/wreck
+![shipwreck-main](/public/readme-images/shipwreck-00.jpeg)
 
-A multi query endpoint. You can specifiy any of the fields to filter returns. See other endpoints for specfics on data fields. To return a single known wreck use /id. To return a known wreck(s) by name use /name
+![shipreck-proximity](/public/readme-images/shipwreck-03.jpeg)
 
-	$.ajax({
-		url: 'http://www.rednightsky.com/wreck',
-		method: 'GET',
-		
-		data: {
+## Research
 
-			location: {
-		      lat: 33.998014,
-		      lon: -118.823274,
-		      radius: 500000	
-	    	},
+Gather information about specific ships within the app.  Search the New York Time, Wikipedia, and the Library of Congress.
 
-	    	before: '1945',
-	    	after: '1900',
+![shipwreck-research](/public/readme-images/shipwreck-02.jpeg)
 
-	    	hasName: 1,
+## Find wrecks
 
-	    	string: 'Sailing'
+Swap out the base map for a satellite view and see visible wrecks.
 
-		}
-	})}
-
-
-
-/proximity
-
-Will return wrecks within a given radius (in meters) of a latitude and longitude position.
-
-	$.ajax({
-		url: 'http://www.rednightsky.com/proximity',
-		method: 'GET',
-		data: {
-			lat: 33.998014,
-			lon: -118.823274,
-			radius: 50000
-		}
-	})}
-
-
-/string
-
-Will return all wrecks that match the given string within their historical description field. Many wrecks have historical information. Case insensitive.
-
-	$.ajax({
-		url: 'http://www.rednightsky.com/string',
-		method: 'GET',
-		data: {
-			string: "Wooden"
-		}
-	})}
-
-
-/id
-
-Will return one wreck matching the unique ID.
-
-	$.ajax({
-	 	url: 'http://www.rednightsky.com/id',
-	 	method: 'GET',
-	 	data: {
-	 		id: "59038085f857488a9a719176"
-	 	}
-	 })
-
-
-/range
-
-Will return wrecks sunk within the range (in years) if data available (many wrecks do not have sunk dates)
-
-	$.ajax({
-		url: 'http://www.rednightsky.com/range',
-		method: 'GET',
-		data: {
-			before: '1950',
-			after: '1900'
-		}
-	})
-
-
-/hasname
-
-Will return all wrecks that have a name in the database (many do not)
-
-	$.ajax({
-
-		url: 'http://www.rednightsky.com/hasname',
-		method: 'GET'
-	})
-
-
-/name
-
-Will return wreck(s) that match the vessel name, case insensitive
-
-	$.ajax({
-		url: 'http://www.rednightsky.com/name',
-		method: 'GET',
-		data: {
-			name: 'AMAZON'
-		}
-	})
-
-
-/all
-
-Will return all the wrecks in the database (17,000+).
-	
-	$.ajax({
-		url: 'http://www.rednightsky.com/all',
-		method: 'GET',
-	})
-
-
-
-
+![shipwreck-satellite](/public/readme-images/shipwreck-04.jpeg)
