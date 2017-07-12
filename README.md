@@ -1,6 +1,6 @@
 # US Shipwreck Locator
 
-Search, locate, and find information for 17,000+ shipwrecks in United States territorial and surrounding waters. Built with Node.js, Express, and MongoDB.
+Search, locate, and find information for 17,000+ shipwrecks in United States territorial and surrounding waters. Mark and save favorites for later viewing. Built with Node.js, Express, and MongoDB.
 
 ## Search
 
