@@ -12,28 +12,28 @@ $(document).ready(function() {
 
   var favorites = [];
 
-  var showFavorites = function() {
-    $.ajax({
-      url: '/favs',
-      method: 'GET',
-      data: {
-        ids: favorites
-      }
-    }).done(function(res) {
-      if(markers) markers.clearLayers();
+  var toggleFavorites = function() {
+      $.ajax({
+        url: '/favs',
+        method: 'GET',
+        data: {
+          ids: favorites
+        }
+      }).done(function(res) {
+        if(markers) markers.clearLayers();
 
-      $('#results-list').empty();
+        $('#results-list').empty();
 
-      markerMap = {};
+        markerMap = {};
 
-      buildMarkers(res);
-      buildList(res);
-    })
+        buildMarkers(res);
+        buildList(res);
+      })
   }
 
   if (localStorage.getItem("favorites")) {
       favorites = JSON.parse(localStorage.getItem("favorites"));
-      showFavorites();
+      toggleFavorites();
   }
 
   var openNav = function() {
@@ -76,7 +76,7 @@ $(document).ready(function() {
 
   $('#show-favs').on('click', function(event) {
     event.preventDefault();
-    showFavorites();
+    toggleFavorites();
   })
 
 
